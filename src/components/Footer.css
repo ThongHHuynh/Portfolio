@@ -1,0 +1,18 @@
+.site-footer {
+  padding: 1rem 2rem;
+  text-align: center;
+  background: #ffffff;
+  color: #000000;
+}
+
+.site-footer p {
+  font-size: 0.8rem;
+  font-family: Arial;
+  color: #000000;
+}
+
+@media (max-width: 640px) {
+  .site-footer {
+    padding: 1rem 1.25rem;
+  }
+}
