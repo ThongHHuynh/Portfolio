@@ -4,7 +4,43 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>EyeQ</title>
+    <meta name="theme-color" content="#faf9f6" />
+
+    <title>Thong Huynh — Robotics Software Engineer</title>
+    <meta
+      name="description"
+      content="Thong Huynh is a robotics software engineer working in robotics, AI and automation — autonomous mobile robots, computer vision inspection systems and digital twins."
+    />
+    <meta name="author" content="Thong Huynh" />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Thong Huynh — Robotics Software Engineer" />
+    <meta
+      property="og:description"
+      content="Robotics, AI and automation. Autonomous mobile robots, computer vision inspection systems and digital twins."
+    />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <script>
+      // Runs before first paint so a dark-mode visitor never sees a white flash.
+      (function () {
+        try {
+          var stored = localStorage.getItem("portfolio-theme");
+          var prefersDark = window.matchMedia(
+            "(prefers-color-scheme: dark)"
+          ).matches;
+          var theme = stored === "light" || stored === "dark"
+            ? stored
+            : prefersDark
+              ? "dark"
+              : "light";
+          document.documentElement.dataset.theme = theme;
+          document.documentElement.style.colorScheme = theme;
+        } catch (error) {
+          document.documentElement.dataset.theme = "light";
+        }
+      })();
+    </script>
   </head>
   <body>
     <div id="root"></div>

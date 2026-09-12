@@ -1,18 +1,74 @@
 .site-footer {
-  padding: 1rem 2rem;
-  text-align: center;
-  background: #ffffff;
-  color: #000000;
+  border-top: 1px solid var(--line);
+  background: var(--bg);
 }
 
-.site-footer p {
-  font-size: 0.8rem;
-  font-family: Arial;
-  color: #000000;
+.footer-inner {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding-block: 2rem;
+}
+
+.footer-copy {
+  font-size: 0.82rem;
+  color: var(--ink-muted);
+}
+
+.footer-nav {
+  display: flex;
+  flex-wrap: wrap;
+  /* Without this the text links stretch to the icon buttons' height and their
+     text rides along the top instead of lining up with the circles. */
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.footer-nav a {
+  font-size: 0.82rem;
+  color: var(--ink-muted);
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.footer-nav a:hover {
+  color: var(--ink);
+}
+
+.footer-socials {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.footer-social {
+  display: grid;
+  place-items: center;
+  width: 2.1rem;
+  height: 2.1rem;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  color: var(--ink-muted);
+  transition: color 0.2s ease, border-color 0.2s ease, background 0.2s ease;
+}
+
+.footer-social:hover {
+  color: var(--ink);
+  border-color: var(--line-strong);
+  background: var(--hover);
+}
+
+.footer-social-glyph {
+  width: 1rem;
+  height: 1rem;
+  display: block;
 }
 
 @media (max-width: 640px) {
-  .site-footer {
-    padding: 1rem 1.25rem;
+  .footer-inner {
+    flex-direction: column;
+    align-items: flex-start;
   }
 }

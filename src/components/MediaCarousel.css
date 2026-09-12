@@ -1,0 +1,293 @@
+.media-carousel {
+  display: grid;
+  gap: 1.5rem;
+  justify-items: center;
+  animation: media-fade 0.35s ease;
+}
+
+@keyframes media-fade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* Dimensions copied from the home page rotator so the two match exactly. */
+.media-stage {
+  position: relative;
+  width: 100%;
+  height: 34rem;
+  perspective: 1600px;
+  perspective-origin: 50% 50%;
+  transform-style: preserve-3d;
+}
+
+.media-stage:focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: 6px;
+  border-radius: var(--radius-lg);
+}
+
+.media-card {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: min(38rem, 82%);
+  height: 100%;
+  margin-left: calc(min(38rem, 82%) / -2);
+  padding: 0;
+  display: block;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  background: #0d0d0d;
+  overflow: hidden;
+  cursor: pointer;
+  isolation: isolate;
+  transition: transform 0.9s cubic-bezier(0.32, 0.72, 0, 1),
+    opacity 0.7s ease, box-shadow 0.7s ease;
+}
+
+.media-card.is-active {
+  box-shadow: 0 22px 50px var(--shadow);
+}
+
+.media-thumb {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+  object-position: center;
+}
+
+.media-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+      180deg,
+      rgba(0, 0, 0, 0.04) 0%,
+      rgba(0, 0, 0, 0.12) 45%,
+      rgba(0, 0, 0, 0.62) 100%
+    ),
+    linear-gradient(180deg, rgba(0, 0, 0, 0.3), transparent 22%);
+}
+
+.media-card:not(.is-active) .media-overlay {
+  background: linear-gradient(
+    180deg,
+    rgba(0, 0, 0, 0.35) 0%,
+    rgba(0, 0, 0, 0.55) 100%
+  );
+}
+
+/* Play glyph marking a video in the ring. */
+.media-badge {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  z-index: 2;
+  display: grid;
+  place-items: center;
+  width: 3.4rem;
+  height: 3.4rem;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  background: rgba(20, 20, 22, 0.46);
+  -webkit-backdrop-filter: blur(14px) saturate(160%);
+  backdrop-filter: blur(14px) saturate(160%);
+  color: #fff;
+  transform: translate(-50%, -50%);
+  transition: transform 0.3s ease;
+}
+
+.media-card.is-active:hover .media-badge {
+  transform: translate(-50%, -50%) scale(1.08);
+}
+
+.media-badge svg {
+  width: 1.35rem;
+  height: 1.35rem;
+}
+
+/* Same frosted panel as the home page rotator. */
+.media-details {
+  position: absolute;
+  right: 1.6rem;
+  bottom: 1.6rem;
+  left: 1.6rem;
+  z-index: 2;
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0.8rem 1rem;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 0.85rem;
+  background: rgba(20, 20, 22, 0.42);
+  -webkit-backdrop-filter: blur(14px) saturate(160%);
+  backdrop-filter: blur(14px) saturate(160%);
+  text-align: left;
+}
+
+.media-name {
+  color: #fff;
+  font-size: 1.05rem;
+  font-weight: 500;
+  line-height: 1.3;
+}
+
+.media-hint {
+  flex-shrink: 0;
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.78);
+  white-space: nowrap;
+}
+
+.media-controls {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+/* ---- Still frame: the image box the carousel opens into ---- */
+
+.media-frame {
+  position: relative;
+  margin: 0;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  background: var(--bg-soft);
+  overflow: hidden;
+  aspect-ratio: 16 / 10;
+  display: grid;
+  place-items: center;
+  animation: media-open 0.4s cubic-bezier(0.32, 0.72, 0, 1);
+}
+
+@keyframes media-open {
+  from {
+    opacity: 0;
+    transform: scale(0.985);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.media-frame-el {
+  width: 100%;
+  height: 100%;
+  display: block;
+  /* contain, not cover: these photos are a mix of portrait and landscape and
+     cropping them to a fixed frame cuts the subject out. */
+  object-fit: contain;
+}
+
+.media-frame video.media-frame-el {
+  background: #000;
+}
+
+/* Small control that returns to the rotating carousel. */
+.media-back {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  z-index: 2;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.5rem 0.9rem;
+  border: 1px solid rgba(255, 255, 255, 0.24);
+  border-radius: 999px;
+  background: rgba(20, 20, 22, 0.5);
+  -webkit-backdrop-filter: blur(14px) saturate(160%);
+  backdrop-filter: blur(14px) saturate(160%);
+  color: #fff;
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: background 0.2s ease, border-color 0.2s ease;
+}
+
+.media-back:hover {
+  background: rgba(20, 20, 22, 0.72);
+  border-color: rgba(255, 255, 255, 0.45);
+}
+
+.media-back svg {
+  width: 0.9rem;
+  height: 0.9rem;
+}
+
+.media-caption {
+  position: absolute;
+  left: 1rem;
+  bottom: 1rem;
+  z-index: 2;
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.6rem;
+  padding: 0.45rem 0.85rem;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 999px;
+  background: rgba(20, 20, 22, 0.5);
+  -webkit-backdrop-filter: blur(14px) saturate(160%);
+  backdrop-filter: blur(14px) saturate(160%);
+  color: #fff;
+  font-size: 0.8rem;
+}
+
+.media-count {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+/* A lone image needs no controls, so it carries no overlay furniture. */
+.media-frame--static .media-caption,
+.media-frame--static .media-back {
+  display: none;
+}
+
+@media (max-width: 900px) {
+  .media-stage {
+    height: 24rem;
+  }
+
+  .media-card {
+    width: min(28rem, 90%);
+    margin-left: calc(min(28rem, 90%) / -2);
+  }
+
+  .media-details {
+    right: 1rem;
+    bottom: 1rem;
+    left: 1rem;
+  }
+}
+
+@media (max-width: 640px) {
+  .media-stage {
+    height: 19rem;
+  }
+
+  .media-frame {
+    aspect-ratio: 4 / 3;
+  }
+
+  .media-name {
+    font-size: 0.95rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .media-card {
+    transition: opacity 0.2s ease;
+  }
+
+  .media-carousel,
+  .media-frame {
+    animation: none;
+  }
+}

@@ -1,0 +1,212 @@
+.intro-section {
+  padding-block: 5rem 6rem;
+  scroll-margin-top: var(--header-h);
+}
+
+.intro-inner {
+  display: grid;
+  grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.85fr);
+  gap: 4rem;
+  align-items: center;
+}
+
+.intro-copy {
+  display: grid;
+  gap: 1.5rem;
+  align-content: center;
+}
+
+.intro-copy h1 {
+  max-width: 14ch;
+}
+
+.intro-copy .lead {
+  max-width: 34rem;
+}
+
+.intro-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-top: 0.5rem;
+}
+
+.intro-media {
+  justify-self: center;
+  width: min(26rem, 100%);
+  aspect-ratio: 1 / 1;
+  overflow: hidden;
+  border-radius: 50%;
+}
+
+.intro-photo {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+  object-position: 50% 30%;
+}
+
+.where-section {
+  padding-block: 3.5rem;
+}
+
+.where-inner {
+  display: grid;
+  gap: 1.5rem;
+}
+
+.where-list {
+  display: grid;
+  gap: 0;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.where-item {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) auto;
+  gap: 1.5rem;
+  align-items: baseline;
+  padding-block: 1.1rem;
+  border-bottom: 1px solid var(--line);
+}
+
+.where-item:last-child {
+  border-bottom: 0;
+}
+
+.where-role {
+  font-size: 1.05rem;
+}
+
+.where-company {
+  color: var(--ink-muted);
+}
+
+.where-period {
+  font-size: 0.85rem;
+  color: var(--ink-faint);
+  white-space: nowrap;
+}
+
+.featured-section {
+  padding-block: 5rem;
+}
+
+/* Heading gets the full content width; the "all" link drops to its own row
+   beneath it, so long headings are never squeezed by a neighbour. */
+.featured-head {
+  display: grid;
+  gap: 1rem;
+  margin-bottom: 2.5rem;
+}
+
+.featured-copy {
+  display: grid;
+  gap: 0.9rem;
+  max-width: none;
+}
+
+/* Each span is its own line, so the break lands where it is wanted rather
+   than wherever the text happens to run out of room. */
+.section-heading span {
+  display: block;
+}
+
+/* The side quest heading is longer, so it sets a little smaller to hold
+   one line on desktop. */
+.section-heading--wide {
+  font-size: clamp(1.45rem, 2.5vw, 2.05rem);
+}
+
+.featured-all {
+  justify-self: end;
+}
+
+.featured-all {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-size: 0.92rem;
+  color: var(--ink-muted);
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.featured-all:hover {
+  color: var(--ink);
+}
+
+.featured-all svg {
+  width: 1rem;
+  height: 1rem;
+  transition: transform 0.25s ease;
+}
+
+.featured-all:hover svg {
+  transform: translateX(4px);
+}
+
+/* Two across rather than three, so each card is meaningfully larger. */
+.featured-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1.75rem;
+}
+
+.quests-section {
+  padding-block: 5rem;
+}
+
+.featured-note {
+  margin-top: 2.5rem;
+  text-align: center;
+  font-size: 0.85rem;
+  letter-spacing: 0.06em;
+  color: var(--ink-muted);
+}
+
+@media (max-width: 900px) {
+  .intro-section {
+    padding-block: 3rem 4rem;
+  }
+
+  .intro-inner {
+    grid-template-columns: 1fr;
+    gap: 2.5rem;
+  }
+
+  /* Photo first on narrow screens, copy below it. */
+  .intro-media {
+    order: -1;
+    width: min(18rem, 70%);
+  }
+
+  .intro-copy h1,
+  .intro-copy .lead {
+    max-width: none;
+  }
+
+  .featured-section,
+  .quests-section {
+    padding-block: 3.5rem;
+  }
+
+  .where-item {
+    grid-template-columns: 1fr;
+    gap: 0.3rem;
+  }
+}
+
+@media (max-width: 640px) {
+  .featured-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .intro-actions .button {
+    flex: 1 1 auto;
+    justify-content: center;
+  }
+}

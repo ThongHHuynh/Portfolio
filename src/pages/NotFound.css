@@ -1,0 +1,21 @@
+.not-found {
+  display: grid;
+  place-items: center;
+  min-height: 60vh;
+}
+
+.not-found-inner {
+  display: grid;
+  gap: 1.25rem;
+  max-width: 34rem;
+  text-align: center;
+  justify-items: center;
+}
+
+.not-found-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  justify-content: center;
+  margin-top: 0.5rem;
+}

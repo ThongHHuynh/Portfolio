@@ -1,0 +1,220 @@
+.rotator {
+  display: grid;
+  gap: 1.5rem;
+  justify-items: center;
+}
+
+/* The 3D ring. Perspective lives here so cards rotate toward the viewer. */
+.rotator-stage {
+  position: relative;
+  width: 100%;
+  height: 34rem;
+  perspective: 1600px;
+  perspective-origin: 50% 50%;
+  transform-style: preserve-3d;
+}
+
+.rotator-stage:focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: 6px;
+  border-radius: var(--radius-lg);
+}
+
+.rotator-card {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: min(38rem, 82%);
+  height: 100%;
+  margin-left: calc(min(38rem, 82%) / -2);
+  padding: 0;
+  display: block;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  background: #0d0d0d;
+  overflow: hidden;
+  cursor: pointer;
+  isolation: isolate;
+  /* Slow, eased turn — the rotation should feel unhurried. */
+  transition: transform 0.9s cubic-bezier(0.32, 0.72, 0, 1),
+    opacity 0.7s ease, box-shadow 0.7s ease;
+}
+
+.rotator-card.is-active {
+  cursor: default;
+  box-shadow: 0 22px 50px var(--shadow);
+}
+
+.rotator-image {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.rotator-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+      180deg,
+      rgba(0, 0, 0, 0.04) 0%,
+      rgba(0, 0, 0, 0.12) 45%,
+      rgba(0, 0, 0, 0.62) 100%
+    ),
+    linear-gradient(180deg, rgba(0, 0, 0, 0.3), transparent 22%);
+}
+
+/* Non-active cards dim back so the front one reads clearly. */
+.rotator-card:not(.is-active) .rotator-overlay {
+  background: linear-gradient(
+    180deg,
+    rgba(0, 0, 0, 0.35) 0%,
+    rgba(0, 0, 0, 0.55) 100%
+  );
+}
+
+.rotator-body {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  padding: 1.6rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 1rem;
+  text-align: left;
+}
+
+.rotator-meta {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.rotator-event {
+  font-size: 0.75rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.9);
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.45);
+}
+
+.rotator-year {
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.75);
+  white-space: nowrap;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.45);
+}
+
+/* Same frosted panel as the project and side quest cards. */
+.rotator-details {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0.8rem 1rem;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 0.85rem;
+  background: rgba(20, 20, 22, 0.42);
+  -webkit-backdrop-filter: blur(14px) saturate(160%);
+  backdrop-filter: blur(14px) saturate(160%);
+}
+
+.rotator-name {
+  color: #fff;
+  font-size: 1.2rem;
+  font-weight: 500;
+  line-height: 1.25;
+}
+
+.rotator-result {
+  flex-shrink: 0;
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.78);
+  white-space: nowrap;
+}
+
+.rotator-controls {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.rotator-arrow {
+  display: grid;
+  place-items: center;
+  width: 2.4rem;
+  height: 2.4rem;
+  padding: 0;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--ink-muted);
+  cursor: pointer;
+  transition: color 0.2s ease, border-color 0.2s ease, background 0.2s ease;
+}
+
+.rotator-arrow:hover {
+  color: var(--ink);
+  border-color: var(--line-strong);
+  background: var(--hover);
+}
+
+.rotator-arrow svg {
+  width: 1.05rem;
+  height: 1.05rem;
+}
+
+.rotator-dots {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.rotator-dot {
+  width: 0.5rem;
+  height: 0.5rem;
+  padding: 0;
+  border: 0;
+  border-radius: 999px;
+  background: var(--line-strong);
+  cursor: pointer;
+  transition: background 0.3s ease, width 0.3s ease;
+}
+
+.rotator-dot.is-active {
+  width: 1.4rem;
+  background: var(--ink);
+}
+
+/* Screen-reader only announcement of the current card. */
+.rotator-live {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+@media (max-width: 640px) {
+  .rotator-stage {
+    height: 24rem;
+  }
+
+  .rotator-card {
+    width: min(22rem, 86%);
+    margin-left: calc(min(22rem, 86%) / -2);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rotator-card {
+    transition: opacity 0.2s ease;
+  }
+}

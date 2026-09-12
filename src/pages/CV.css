@@ -1,0 +1,179 @@
+/* The CV page is sized to one screen: a minimal header row, then a viewer
+   that claims every remaining pixel. */
+.page.cv-page {
+  /* Exact A4 ratio, read from the PDF's MediaBox (595.276 x 841.89pt).
+     Matching it means the page fills the frame instead of letterboxing. */
+  --cv-page-aspect: 595.276 / 841.89;
+
+  display: flex;
+  flex-direction: column;
+  min-height: calc(100dvh - var(--header-h));
+  padding-block: 0.9rem 1.1rem;
+}
+
+.cv-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.6rem 1.25rem;
+  padding-bottom: 0.7rem;
+  border-bottom: 1px solid var(--line);
+  margin-bottom: 0.9rem;
+}
+
+/* Name and role share one line rather than stacking. */
+.cv-head-copy {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.3rem 0.75rem;
+}
+
+.cv-head-copy h1 {
+  font-size: clamp(1.15rem, 1.8vw, 1.5rem);
+}
+
+.cv-role {
+  font-size: 0.9rem;
+  color: var(--ink-muted);
+}
+
+.cv-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.cv-actions .button svg {
+  width: 1.05rem;
+  height: 1.05rem;
+}
+
+/* Wrapper claims the remaining height; the viewer is centred inside it and
+   takes its width from the page ratio, so the resume renders as large as the
+   available height allows instead of being letterboxed inside a wide box. */
+.cv-viewer-wrap {
+  flex: 1;
+  display: flex;
+  align-items: stretch;
+  justify-content: center;
+  min-height: 0;
+}
+
+.cv-viewer {
+  display: block;
+  /* Fit to whichever axis runs out first, so the page is as large as the
+     screen allows on any aspect ratio: tall desktop, short laptop, or phone.
+     height:100% fills the row; max-width caps it when the row is narrower
+     than the page ratio needs, and the aspect-ratio keeps it A4-shaped. */
+  height: 100%;
+  width: auto;
+  aspect-ratio: var(--cv-page-aspect);
+  max-width: 100%;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--bg-soft);
+  overflow: hidden;
+}
+
+.cv-fallback {
+  display: grid;
+  gap: 1rem;
+  justify-items: center;
+  align-content: center;
+  height: 100%;
+  padding: 3rem 1.5rem;
+  text-align: center;
+}
+
+.cv-fallback h2 {
+  font-size: clamp(1.3rem, 2.4vw, 1.7rem);
+}
+
+.cv-fallback .lead {
+  max-width: 32rem;
+}
+
+.cv-fallback-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  justify-content: center;
+  margin-top: 0.5rem;
+}
+
+/* Short viewports — laptops at 768px tall, landscape phones. Shed header
+   height so the resume keeps as much of the screen as possible. */
+@media (max-height: 760px) {
+  .page.cv-page {
+    padding-block: 0.5rem 0.6rem;
+  }
+
+  .cv-head {
+    padding-bottom: 0.5rem;
+    margin-bottom: 0.55rem;
+  }
+
+  .cv-head-copy h1 {
+    font-size: 1.05rem;
+  }
+
+  .cv-role {
+    display: none;
+  }
+
+  .cv-actions .button {
+    padding: 0.45rem 0.85rem;
+    font-size: 0.82rem;
+  }
+}
+
+@media (max-width: 820px) {
+  .page.cv-page {
+    padding-block: 0.75rem 0.9rem;
+  }
+
+  .cv-head {
+    gap: 0.5rem 0.9rem;
+    padding-bottom: 0.6rem;
+    margin-bottom: 0.7rem;
+  }
+
+  .cv-actions .button {
+    padding: 0.6rem 1rem;
+    font-size: 0.85rem;
+  }
+}
+
+@media (max-width: 640px) {
+  /* Buttons drop to their own full-width row so the name keeps the line above. */
+  .cv-actions {
+    width: 100%;
+  }
+
+  .cv-actions .button {
+    flex: 1 1 auto;
+    justify-content: center;
+  }
+}
+
+/* Printing the CV page should print the page furniture away; the PDF itself
+   is what the visitor actually wants on paper. */
+@media print {
+  .site-header,
+  .site-footer,
+  .back-to-top,
+  .cv-actions {
+    display: none !important;
+  }
+
+  .page {
+    padding-block: 0;
+  }
+
+  .cv-viewer {
+    border: 0;
+    height: auto;
+  }
+}

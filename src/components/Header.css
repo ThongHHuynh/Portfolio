@@ -1,47 +1,244 @@
+/* The sticky wrapper is an invisible rail — it only reserves flow space and
+   holds the floating island. Clicks pass straight through it to the page. */
 .site-header {
+  /* Set from JS: 0 at the top of the page, 1 once fully collapsed. Every
+     value below is interpolated from it, so the island tracks the scroll
+     continuously rather than flipping between two states. */
+  --progress: 0;
+  /* Width the island contracts to at --progress: 1. */
+  --island-min: 36rem;
+
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  padding: 0.65rem 1rem;
+  background: transparent;
+  pointer-events: none;
+}
+
+/* The island itself: a glass capsule spanning brand to theme toggle. */
+.header-inner {
+  pointer-events: auto;
+  width: 100%;
+  max-width: calc(
+    var(--shell) - (var(--shell) - var(--island-min)) * var(--progress)
+  );
+  min-height: calc(3.3rem - 0.3rem * var(--progress));
+  margin: 0 auto;
+  padding: 0.35rem 0.45rem 0.35rem 1.15rem;
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 1rem;
-  padding: 1rem 2rem;
-  background: #ffffff;
-  color: #fff;
+  border: 1px solid var(--glass-border);
+  border-radius: 999px;
+  background: rgba(
+    var(--glass-rgb),
+    calc(var(--glass-a) + (var(--glass-a-max) - var(--glass-a)) * var(--progress))
+  );
+  box-shadow: 0 calc(6px + 4px * var(--progress))
+    calc(22px + 8px * var(--progress)) var(--shadow);
 }
 
-.header-brand {
-  display: flex;
-  align-items: center;
+/* The acrylic effect. Kept in @supports so browsers without backdrop-filter
+   fall back to the near-opaque fill below rather than a see-through bar. */
+@supports (backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px)) {
+  .header-inner,
+  .mobile-menu {
+    /* saturate() BELOW 100% drains colour out of whatever sits behind the
+       glass, so the blur reads as neutral grey instead of smearing coloured
+       contours from the hero dots and project photos through it. */
+    -webkit-backdrop-filter: blur(26px) saturate(45%);
+    backdrop-filter: blur(26px) saturate(45%);
+  }
+}
+
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .header-inner,
+  .mobile-menu {
+    background: var(--glass-fallback);
+  }
 }
 
 .brand-name {
-  color: #000000;
+  display: flex;
+  align-items: center;
+  color: var(--ink);
   text-decoration: none;
-  font-size: 1.1rem;
+  font-size: 0.95rem;
   font-weight: 700;
   letter-spacing: 0.08em;
   text-transform: uppercase;
+  white-space: nowrap;
+}
+
+/* "Thong Huynh" narrows to "TH" as you scroll. Both halves are driven by
+   --progress, so the wordmark contracts in step with the island's width.
+   The two fades overlap slightly (full out by 50%, initials in from 40%) so
+   the wordmark morphs continuously instead of blanking out mid-swap. */
+.brand-full,
+.brand-short {
+  display: block;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+/* Generous rem caps, not `ch`: the brand is bold, uppercase and letter-spaced,
+   so a `ch` unit (the width of "0") badly under-measures it and the name gets
+   clipped by the overflow:hidden above. max-width only caps — each span still
+   renders at its natural content width. */
+.brand-full {
+  max-width: calc(13rem * (1 - var(--progress)));
+  opacity: clamp(0, calc(1 - var(--progress) / 0.5), 1);
+}
+
+.brand-short {
+  max-width: calc(3.5rem * var(--progress));
+  opacity: clamp(0, calc((var(--progress) - 0.4) / 0.4), 1);
 }
 
 .header-nav {
   display: flex;
-  flex-wrap: wrap;
-  gap: 1.5rem;
+  align-items: center;
+  gap: 0.25rem;
 }
 
-.header-nav a {
-  color: #000000;
+/* Not --ink-muted: against the translucent grey glass that lands at 3.6:1,
+   under the 4.5:1 minimum. This darker tone clears it at 5.0:1. */
+.header-link,
+.mobile-link {
+  color: var(--nav-ink);
+}
+
+.header-link {
+  position: relative;
+  padding: 0.45rem 0.8rem;
+  border-radius: 999px;
   text-decoration: none;
-  font-size: 0.95rem;
+  font-size: 0.9rem;
+  white-space: nowrap;
+  transition: color 0.2s ease, background 0.2s ease;
 }
 
-@media (max-width: 640px) {
+.header-link:hover {
+  color: var(--ink);
+  background: var(--hover);
+}
+
+.header-link.is-active {
+  color: var(--ink);
+  background: var(--hover);
+}
+
+.header-link--cta {
+  margin-left: 0.35rem;
+  padding: 0.45rem 1rem;
+  border: 1px solid var(--ink);
+  color: var(--ink);
+}
+
+.header-link--cta:hover {
+  background: var(--ink);
+  color: var(--bg);
+}
+
+/* Toggle sits beside the links on desktop, beside the burger on mobile. */
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.menu-toggle {
+  display: none;
+  width: 2.4rem;
+  height: 2.4rem;
+  padding: 0;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: transparent;
+  cursor: pointer;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+}
+
+.menu-bar {
+  display: block;
+  width: 1.05rem;
+  height: 1.5px;
+  background: var(--ink);
+  transition: transform 0.25s ease, opacity 0.25s ease;
+}
+
+.menu-bar.is-open:first-child {
+  transform: translateY(3.25px) rotate(45deg);
+}
+
+.menu-bar.is-open:last-child {
+  transform: translateY(-3.25px) rotate(-45deg);
+}
+
+/* Mobile panel is a second island under the first. Absolutely positioned so
+   opening it overlays the page instead of pushing the content down. */
+.mobile-menu {
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 0.75rem;
+  right: 0.75rem;
+  pointer-events: auto;
+  flex-direction: column;
+  padding: 0.35rem 1.1rem 0.6rem;
+  border: 1px solid var(--glass-border);
+  border-radius: 1.4rem;
+  background: var(--glass-strong);
+  box-shadow: 0 10px 30px var(--shadow);
+}
+
+.mobile-link {
+  padding: 0.85rem 0.25rem;
+  text-decoration: none;
+  font-size: 1rem;
+  border-bottom: 1px solid var(--line);
+}
+
+.mobile-link:last-child {
+  border-bottom: 0;
+}
+
+.mobile-link.is-active {
+  color: var(--ink);
+}
+
+@media (max-width: 860px) {
+  /* No room to contract on smaller screens — hold a steady width, but let the
+     glass and shadow still respond to scroll. */
   .site-header {
-    flex-direction: column;
-    align-items: flex-start;
-    padding: 1rem 1.25rem;
+    --island-min: var(--shell);
+  }
+}
+
+@media (max-width: 720px) {
+  .site-header {
+    padding: 0.5rem 0.75rem;
+  }
+
+  .header-inner {
+    min-height: 3.1rem;
+    padding: 0.3rem 0.4rem 0.3rem 1rem;
   }
 
   .header-nav {
-    gap: 1rem;
+    display: none;
+  }
+
+  .menu-toggle {
+    display: flex;
+  }
+
+  .mobile-menu.is-open {
+    display: flex;
   }
 }

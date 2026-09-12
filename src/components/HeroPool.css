@@ -1,0 +1,117 @@
+/* Dots rest at the background colour (invisible) and blend to the accent as
+   the cursor displaces them, so the field only shows where the pointer went.
+   Keep --hero-dot-rest in step with --bg for each theme. */
+.hero-pool {
+  /* Must equal --bg exactly (#faf9f6) or resting dots show as a visible grid. */
+  --hero-dot-rest: 250, 249, 246;
+  --hero-dot-active: 29, 78, 216;
+  --hero-reticle: rgba(20, 18, 13, 0.6);
+
+  position: relative;
+  overflow: hidden;
+  touch-action: pan-y;
+}
+
+:root[data-theme="dark"] .hero-pool {
+  --hero-dot-rest: 10, 16, 32;
+  --hero-dot-active: 125, 176, 255;
+  --hero-reticle: rgba(226, 236, 252, 0.72);
+}
+
+/* Hide the system cursor only while the reticle is showing, and never over
+   something the visitor can actually click or type into. */
+.hero-pool[data-pointer-active] {
+  cursor: none;
+}
+
+.hero-pool a,
+.hero-pool button,
+.hero-pool input,
+.hero-pool textarea {
+  cursor: pointer;
+}
+
+.hero-field {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.hero-field-canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+/* Crosshair reticle that replaces the pointer inside the hero. */
+.hero-reticle {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 5;
+  display: block;
+  width: 27px;
+  height: 27px;
+  border: 1px solid var(--hero-reticle);
+  opacity: 0;
+  pointer-events: none;
+  transform: translate(-100%, -100%);
+  transition: opacity 0.15s cubic-bezier(0.32, 0.72, 0, 1);
+}
+
+.hero-pool[data-pointer-active] .hero-reticle {
+  opacity: 1;
+}
+
+.hero-reticle::before,
+.hero-reticle::after {
+  content: "";
+  position: absolute;
+  background: var(--hero-reticle);
+}
+
+/* Horizontal hairline */
+.hero-reticle::before {
+  top: 50%;
+  left: 7px;
+  width: calc(100% - 14px);
+  height: 1px;
+}
+
+/* Vertical hairline */
+.hero-reticle::after {
+  top: 7px;
+  left: 50%;
+  width: 1px;
+  height: calc(100% - 14px);
+}
+
+/* Solid centre pip, knocked out of the crosshair. */
+.hero-reticle i {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 7px;
+  height: 7px;
+  background: var(--bg);
+  font-style: normal;
+  transform: translate(-50%, -50%);
+}
+
+/* Content must sit above the field. */
+.hero-pool > .shell {
+  position: relative;
+  z-index: 3;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-pool[data-pointer-active] {
+    cursor: auto;
+  }
+
+  .hero-reticle {
+    display: none;
+  }
+}
