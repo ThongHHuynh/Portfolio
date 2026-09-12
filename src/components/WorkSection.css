@@ -1,0 +1,76 @@
+.work-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.work-entry {
+  border-radius: 20px;
+  padding: 1.75rem 2rem;
+}
+
+.work-entry-header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+  padding-bottom: 1.25rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.work-role {
+  font-size: 1.2rem;
+}
+
+.work-company {
+  color: var(--accent);
+  font-weight: 600;
+  margin-top: 0.15rem;
+}
+
+.work-period {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  white-space: nowrap;
+}
+
+.work-items {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.work-item-title {
+  font-size: 1rem;
+  margin-bottom: 0.4rem;
+}
+
+.work-item-desc {
+  color: var(--text-muted);
+  line-height: 1.55;
+  font-size: 0.95rem;
+  margin-bottom: 0.75rem;
+}
+
+.tag-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.tag {
+  font-size: 0.78rem;
+  font-weight: 500;
+  padding: 0.3rem 0.65rem;
+  border-radius: 999px;
+  background: var(--accent-soft);
+  color: var(--accent);
+}
+
+@media (max-width: 600px) {
+  .work-entry {
+    padding: 1.5rem;
+  }
+}

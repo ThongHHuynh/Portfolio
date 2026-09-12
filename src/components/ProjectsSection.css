@@ -1,181 +1,69 @@
-.projects-section {
-  /* canvas height */
-  min-height: 100vh;
-  padding: 2rem 2rem 5rem;
-  display: grid;
-  gap: 2rem;
-  /* margin for scrolling */
-  scroll-margin-top: 0rem;
-  /* make content stay on top */
-  align-content: start;
-  /* add border between each section */
-}
-
-.projects-copy {
-  display: grid;
-  gap: 1rem;
-  max-width: 42rem;
-}
-
-.projects-eyebrow {
-  margin: 0;
-  font-size: 0.85rem;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-}
-
-.projects-title {
-  margin: 0;
-  font-size: clamp(2rem, 3.8vw, 3rem);
-  font-weight: 400;
-  line-height: 1.1;
-}
-
-.projects-text {
-  max-width: 36rem;
-  font-size: 1rem;
-  line-height: 1.8;
-}
-
 .projects-grid {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  justify-content: center;
-  gap: 3rem;
-  padding-right: 1.5rem;
-  padding-left: 1.5rem;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1.5rem;
 }
 
 .project-card {
-  position: relative;
-  /* min-height: 0; */
-  border: 1px solid #d9d9d9;
-  display: grid;
+  border-radius: 20px;
   overflow: hidden;
-  background: #0d0d0d;
-  border-radius: 1.5rem;
-  isolation: isolate;
-  aspect-ratio: 1 / 1;
-  min-height: unset;
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
 }
 
-.project-media,
-.project-content,
-.project-overlay {
-  grid-area: 1 / 1;
+.project-card:hover {
+  transform: translateY(-4px);
 }
 
 .project-media {
-  position: relative;
-  min-height: 100%;
+  aspect-ratio: 16 / 10;
+  overflow: hidden;
 }
 
-.project-image {
+.project-media img {
   width: 100%;
   height: 100%;
-  display: block;
   object-fit: cover;
-  object-position: center;
+  transition: transform 0.4s ease;
 }
 
-.project-overlay {
-  background:
-    linear-gradient(180deg, rgba(0, 0, 0, 0.08) 0%, rgba(0, 0, 0, 0.5) 55%, rgba(0, 0, 0, 0.92) 100%),
-    linear-gradient(180deg, rgba(0, 0, 0, 0.34), transparent 28%);
+.project-card:hover .project-media img {
+  transform: scale(1.05);
 }
 
-.project-content {
-  z-index: 1;
-  min-height: 100%;
-  padding: 1.5rem;
+.project-body {
+  padding: 1.4rem 1.5rem 1.6rem;
   display: flex;
   flex-direction: column;
+  gap: 0.6rem;
+}
+
+.project-heading {
+  display: flex;
+  align-items: baseline;
   justify-content: space-between;
-}
-
-.project-label,
-.project-name,
-.project-summary {
-  margin: 0;
-}
-
-.project-label {
-  font-size: 0.8rem;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.92);
-  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.45);
+  gap: 0.5rem;
 }
 
 .project-name {
-  font-size: clamp(1.2rem, 2.2vw, 1.6rem);
-  font-weight: 500;
-  line-height: 1.15;
-  color: #fff;
-  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.45);
+  font-size: 1.1rem;
+}
+
+.project-period {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  white-space: nowrap;
+}
+
+.project-subtitle {
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: var(--accent);
 }
 
 .project-summary {
-  font-size: 0.9rem;
-  line-height: 1.7;
-  color: rgba(255, 255, 255, 0.85);
-  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.45);
-}
-
-.project-details {
-  display: grid;
-  width: 100%;
-  gap: 0.75rem;
-  align-self: start;
-  padding: 1rem;
-  border: 1px solid rgba(255, 255, 255, 0.14);
-  border-radius: 1rem;
-  background: rgba(0, 0, 0, 0.28);
-  backdrop-filter: blur(6px);
-  min-height: 0rem;
-  align-content: start;
-}
-
-.projects-coming-soon {
-  margin: 0;
-  text-align: center;
-  font-size: 0.85rem;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-}
-
-@media (max-width: 900px) {
-  .projects-section {
-    padding: 1rem 1.5rem 4rem;
-  }
-
-  .projects-grid {
-    grid-template-columns: 1fr;
-    gap: 1.5rem;
-    padding-right: 0;
-    padding-left: 0;
-  }
-
-  .project-card {
-    min-height: unset;
-  }
-}
-
-@media (max-width: 640px) {
-  .projects-section {
-    padding: 1rem 1.25rem 3rem;
-  }
-
-  .project-card {
-    border-radius: 1.2rem;
-  }
-
-  .project-content {
-    padding: 1.1rem;
-  }
-
-  .project-details {
-    min-height: 8.5rem;
-    padding: 0.85rem;
-  }
+  color: var(--text-muted);
+  font-size: 0.92rem;
+  line-height: 1.55;
 }

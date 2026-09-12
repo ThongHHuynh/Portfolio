@@ -1,26 +1,27 @@
-import Header from "./components/Header.jsx";
-import BackToTopButton from "./components/BackToTopButton.jsx";
-import ContactSection from "./components/ContactSection.jsx";
-import Footer from "./components/Footer.jsx";
-import IntroSection from "./components/IntroSection.jsx";
-import Line from "./components/Line.jsx";
-import ProjectsSection from "./components/ProjectsSection.jsx";
+import { ThemeProvider } from "./context/ThemeContext";
+import Header from "./components/Header";
+import AboutSection from "./components/AboutSection";
+import WorkSection from "./components/WorkSection";
+import ProjectsSection from "./components/ProjectsSection";
+import AwardSection from "./components/AwardSection";
+import ContactSection from "./components/ContactSection";
+import Footer from "./components/Footer";
+import BackToTopButton from "./components/BackToTopButton";
 
 function App() {
   return (
-    <>
+    <ThemeProvider>
       <Header />
-      <Line size="large" />
       <main className="site-main" aria-label="Main content">
-        <IntroSection />
-        <Line size="medium" />
+        <AboutSection />
+        <WorkSection />
         <ProjectsSection />
-        <Line size="medium" />
+        <AwardSection />
         <ContactSection />
       </main>
       <BackToTopButton />
       <Footer />
-    </>
+    </ThemeProvider>
   );
 }
 
