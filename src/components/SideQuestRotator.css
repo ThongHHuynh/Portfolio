@@ -6,11 +6,13 @@
 
 /* The 3D ring. Perspective lives here so cards rotate toward the viewer. */
 .rotator-stage {
-  /* Card width lives here so the side hit zones can measure the margin
-     left over beside the front card. */
+  /* Shared by the card and its narrow-screen override below. */
   --rotator-card-w: min(38rem, 82%);
   /* How far the hit zones reach past the stage, into the page gutter. */
   --rotator-bleed: 1rem;
+  /* Bottom band the zones keep clear, so the front card's info bar (and
+     its "View ->") stays clickable. */
+  --rotator-cta-band: 5rem;
 
   position: relative;
   width: 100%;
@@ -51,22 +53,22 @@
   box-shadow: 0 22px 50px var(--shadow);
 }
 
-/* Invisible click targets: full stage height, spanning from the page
-   gutter in to the edge of the front card. translateZ keeps them behind
-   that card but in front of the side cards, so the whole margin behaves as
-   one target. The min width keeps them comfortable on narrow stages. */
+/* Invisible click targets covering the outer third of the stage on each
+   side: click anywhere over a side card and the ring turns to it. They sit
+   in front of the front card (translateZ plus a high z-index, since 3D
+   contexts sort on either depending on the browser), so they take the
+   outer edges of that card too. The middle third is left to the front card
+   for opening the side quest, as is the bottom band holding its info bar. */
 .rotator-zone {
   position: absolute;
   top: 0;
-  height: 100%;
-  width: max(
-    4rem,
-    calc(50% - var(--rotator-card-w) / 2 + var(--rotator-bleed))
-  );
+  z-index: 50;
+  height: calc(100% - var(--rotator-cta-band));
+  width: calc(100% / 3 + var(--rotator-bleed));
   padding: 0;
   border: 0;
   background: transparent;
-  transform: translateZ(-1px);
+  transform: translateZ(1px);
   cursor: pointer;
   -webkit-tap-highlight-color: transparent;
 }

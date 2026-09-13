@@ -133,11 +133,11 @@ function SideQuestRotator() {
           );
         })}
 
-        {/* Wide invisible targets filling the margins either side of the
-            front card, so the visitor can click anywhere out there to turn
-            the ring instead of hunting for the sliver of a side card. They
-            sit just behind the front card in 3D, which keeps its own click
-            (open the side quest) intact. The arrow buttons below remain the
+        {/* Invisible targets over the outer third of the stage on each
+            side, so clicking anywhere on a side card turns the ring to it
+            rather than only on the sliver the front card leaves exposed.
+            They cover the front card's outer edges; its middle third still
+            opens the side quest. The arrow buttons below remain the
             accessible controls, so these stay out of the tab order. */}
         <button
           type="button"
