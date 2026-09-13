@@ -132,6 +132,27 @@ function SideQuestRotator() {
             </button>
           );
         })}
+
+        {/* Wide invisible targets filling the margins either side of the
+            front card, so the visitor can click anywhere out there to turn
+            the ring instead of hunting for the sliver of a side card. They
+            sit just behind the front card in 3D, which keeps its own click
+            (open the side quest) intact. The arrow buttons below remain the
+            accessible controls, so these stay out of the tab order. */}
+        <button
+          type="button"
+          className="rotator-zone rotator-zone-prev"
+          onClick={() => go(active - 1)}
+          tabIndex={-1}
+          aria-hidden="true"
+        />
+        <button
+          type="button"
+          className="rotator-zone rotator-zone-next"
+          onClick={() => go(active + 1)}
+          tabIndex={-1}
+          aria-hidden="true"
+        />
       </div>
 
       <div className="rotator-controls">
