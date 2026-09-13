@@ -366,7 +366,7 @@ export const skills = [
 export const work: WorkRole[] = [
   {
     company: "ABI Ltd.",
-    role: "Robotics Engineer",
+    role: "Robotics Software Engineer",
     period: "May 2026 – Present",
     location: "Ontario, Canada",
     points: [
