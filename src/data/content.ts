@@ -106,7 +106,7 @@ export type WorkRole = {
 export const profile = {
   name: "Thong Huynh",
   shortName: "Tom",
-  role: "Robotics Software Engineer",
+  role: "Robotics Engineer",
   location: "Ontario, Canada",
   photo: portraitImage,
   tagline: "I like to build robots that solve real problems",
