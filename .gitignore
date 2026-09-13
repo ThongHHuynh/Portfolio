@@ -25,3 +25,6 @@ dist-ssr
 
 # Full-size source photos, kept locally; the site uses the optimized copies in src/assets
 _originals/
+
+# Python bytecode from tools/portfolio
+__pycache__/
