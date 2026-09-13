@@ -67,11 +67,10 @@ SLIDES = [
         "subtitle": "Omnidirectional Chassis and Turret",
         "context": "Ontario Tech RoboMaster",
         "period": "September 2024 – Present",
-        "summary": "A 500+ component competition robot: a mecanum-wheeled chassis carrying a turret that rotates and pitches its launcher independently.",
+        "summary": "A robot built for combat in the RoboMaster North America (ARC) competition.",
         "points": [
             "Mechanical design directed end to end in SolidWorks, DFM/DFA compliant.",
-            "CAD version control and design reviews across every subsystem.",
-            "Mentored the team in GD&T, drawings and design principles.",
+            "Custom turret: timing-belt yaw and herringbone-gear pitch, minimizing backlash for accuracy.",
         ],
         "skills": ["Mechanical design", "GD&T", "Design for manufacture", "Design leadership"],
         "tools": ["SolidWorks", "GD&T", "DFM/DFA", "Engineering drawings"],

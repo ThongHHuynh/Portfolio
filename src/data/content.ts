@@ -603,18 +603,19 @@ export const projects: Project[] = [
     image: rm2,
     media: [
       { type: "image", src: rm2, alt: "CAD render of the full robot: mecanum chassis and two-axis turret" },
-      { type: "image", src: rm3, alt: "The robot with its turret pitched up, armour plates in place" },
-      { type: "image", src: rm1, alt: "Chassis with the armour stripped away, showing the turret yaw ring and its drive" },
+      { type: "image", src: rm3, alt: "The robot with its turret pitched up, armor plates in place" },
+      { type: "image", src: rm1, alt: "Chassis with the armor stripped away, showing the turret yaw drive" },
     ],
     summary:
-      "Mechanical design lead for a 500+ component RoboMaster competition robot — an omnidirectional chassis carrying a two-axis turret — taken from CAD through to manufacture.",
+      "A robot built for combat in the RoboMaster North America (ARC) competition.",
     tools: ["SolidWorks", "GD&T", "DFM/DFA", "Engineering drawings"],
     overview: [
-      "Leading design on a competition robot means the assembly is the deliverable, not any one part of it. Five hundred components have to be manufacturable, and they have to stay consistent with whatever the rest of the team is designing around them — which is as much a review and version control problem as a modelling one.",
-      "The robot itself is an omnidirectional platform: a mecanum-wheeled chassis, and above it a turret that rotates on a large ring gear and pitches its launcher independently. Most of the design work sits in the interface between those two, where the loads from the drivetrain meet the yaw axis the turret has to turn on cleanly.",
+      "Leading design on a competition robot means the assembly is the deliverable, not any one part of it. Five hundred components have to be manufacturable, and they have to stay consistent with whatever the rest of the team is designing around them — which is as much a review and version control problem as a modeling one.",
+      "The robot itself is an omnidirectional platform: a mecanum-wheeled chassis, and above it a custom turret that yaws on a timing belt and pitches on herringbone gears. Both were chosen to take the backlash out of the aim, which is where a combat robot's accuracy is won or lost.",
     ],
     highlights: [
       "Directed the mechanical design of a 500+ component competition robot in SolidWorks, ensuring full DFM/DFA compliance for manufacturing.",
+      "Customized the turret with a timing-belt yaw drive and herringbone-gear pitch, minimizing backlash and increasing accuracy.",
       "Managed CAD version control and conducted design reviews to maintain consistency across mechanical and robotic subsystems.",
       "Mentored team members in mechanical design, GD&T, engineering drawings and robotics design principles.",
       "Contributed assembly and mechanical design to the 2025 RoboMaster North America competition robot.",
