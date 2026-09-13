@@ -26,6 +26,9 @@ import pegasus3 from "../assets/Pegasus-3.jpg";
 import pegasus4 from "../assets/Pegasus-4.jpg";
 import pegasus5 from "../assets/Pegasus-5.jpg";
 import pegasusVideo from "../assets/Pegasus-1.MOV";
+import rm1 from "../assets/RM-1.png";
+import rm2 from "../assets/RM-2.png";
+import rm3 from "../assets/RM-3.png";
 import portraitImage from "../assets/Portrait.jpg";
 
 /**
@@ -62,6 +65,9 @@ const imageFocus: Record<string, string> = {
   [pegasus3]: "50% 77%", // Pegasus-3.jpg
   [pegasus4]: "50% 55%", // Pegasus-4.jpg
   [pegasus5]: "50% 50%", // Pegasus-5.jpg
+  [rm1]: "50% 52%", // RM-1.png
+  [rm2]: "45% 50%", // RM-2.png
+  [rm3]: "50% 50%", // RM-3.png
 };
 
 export function focusFor(src: string | undefined): string | undefined {
@@ -585,6 +591,39 @@ export const projects: Project[] = [
       "Gait and motion simulation",
       "3D mapping and obstacle avoidance",
       "Mechanical design",
+    ],
+    featured: true,
+  },
+  {
+    slug: "robomaster",
+    name: "RoboMaster Robot",
+    subtitle: "Omnidirectional Chassis and Turret",
+    period: "September 2024 – Present",
+    context: "Ontario Tech RoboMaster",
+    image: rm2,
+    media: [
+      { type: "image", src: rm2, alt: "CAD render of the full robot: mecanum chassis and two-axis turret" },
+      { type: "image", src: rm3, alt: "The robot with its turret pitched up, armour plates in place" },
+      { type: "image", src: rm1, alt: "Chassis with the armour stripped away, showing the turret yaw ring and its drive" },
+    ],
+    summary:
+      "Mechanical design lead for a 500+ component RoboMaster competition robot — an omnidirectional chassis carrying a two-axis turret — taken from CAD through to manufacture.",
+    tools: ["SolidWorks", "GD&T", "DFM/DFA", "Engineering drawings"],
+    overview: [
+      "Leading design on a competition robot means the assembly is the deliverable, not any one part of it. Five hundred components have to be manufacturable, and they have to stay consistent with whatever the rest of the team is designing around them — which is as much a review and version control problem as a modelling one.",
+      "The robot itself is an omnidirectional platform: a mecanum-wheeled chassis, and above it a turret that rotates on a large ring gear and pitches its launcher independently. Most of the design work sits in the interface between those two, where the loads from the drivetrain meet the yaw axis the turret has to turn on cleanly.",
+    ],
+    highlights: [
+      "Directed the mechanical design of a 500+ component competition robot in SolidWorks, ensuring full DFM/DFA compliance for manufacturing.",
+      "Managed CAD version control and conducted design reviews to maintain consistency across mechanical and robotic subsystems.",
+      "Mentored team members in mechanical design, GD&T, engineering drawings and robotics design principles.",
+      "Contributed assembly and mechanical design to the 2025 RoboMaster North America competition robot.",
+    ],
+    skills: [
+      "Mechanical design",
+      "GD&T and engineering drawings",
+      "Design for manufacture",
+      "Design leadership",
     ],
     featured: true,
   },

@@ -63,6 +63,25 @@ SLIDES = [
         ],
     },
     {
+        "title": "RoboMaster Robot",
+        "subtitle": "Omnidirectional Chassis and Turret",
+        "context": "Ontario Tech RoboMaster",
+        "period": "September 2024 – Present",
+        "summary": "A 500+ component competition robot: a mecanum-wheeled chassis carrying a turret that rotates and pitches its launcher independently.",
+        "points": [
+            "Mechanical design directed end to end in SolidWorks, DFM/DFA compliant.",
+            "CAD version control and design reviews across every subsystem.",
+            "Mentored the team in GD&T, drawings and design principles.",
+        ],
+        "skills": ["Mechanical design", "GD&T", "Design for manufacture", "Design leadership"],
+        "tools": ["SolidWorks", "GD&T", "DFM/DFA", "Engineering drawings"],
+        "images": [
+            ("RM-2.png", "45% 50%"),
+            ("RM-3.png", "50% 50%"),
+            ("RM-1.png", "50% 52%"),
+        ],
+    },
+    {
         "title": "Digital Twin Work Cell",
         "subtitle": "Isaac Sim Validation Pipeline",
         "context": "ABI Ltd.",
