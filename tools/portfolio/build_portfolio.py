@@ -32,7 +32,7 @@ OUTPUT = ROOT / "public" / "Thong_Huynh_Resume_Portfolio.pdf"
 
 OWNER = {
     "name": "Thong Huynh",
-    "role": "Robotics Software Engineer",
+    "role": "Robotics Engineer",
     "email": "thonghuynh.0203@gmail.com",
     "github": "github.com/ThongHHuynh",
     "linkedin": "linkedin.com/in/thonghuynh1",

@@ -110,7 +110,7 @@ export const profile = {
   location: "Ontario, Canada",
   photo: portraitImage,
   tagline: "I like to build robots that solve real problems",
-  bio: "Hi, I'm Thong Huynh — most people call me Tom. I'm a robotics software engineer passionate about robotics, AI and automation. I build and validate industrial robotic systems, from digital twins to computer vision pipelines, and design my own robots on the side.",
+  bio: "Hi, I'm Thong Huynh — most people call me Tom. I'm a robotics engineer passionate about robotics, AI and automation. I build and validate industrial robotic systems, from digital twins to computer vision pipelines, and design my own robots on the side.",
   secondary:
     "Right now I'm building autonomous systems for small and medium manufacturers, helping them adopt automation that used to be out of reach.",
 };
@@ -366,7 +366,7 @@ export const skills = [
 export const work: WorkRole[] = [
   {
     company: "ABI Ltd.",
-    role: "Robotics Software Engineer",
+    role: "Robotics Engineer",
     period: "May 2026 – Present",
     location: "Ontario, Canada",
     points: [

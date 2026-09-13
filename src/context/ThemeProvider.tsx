@@ -16,9 +16,8 @@ function readInitialTheme(): Theme {
     return applied;
   }
 
-  return window.matchMedia("(prefers-color-scheme: dark)").matches
-    ? "dark"
-    : "light";
+  // Light is the default; dark is only ever an explicit choice.
+  return "light";
 }
 
 function ThemeProvider({ children }: { children: ReactNode }) {
@@ -39,31 +38,6 @@ function ThemeProvider({ children }: { children: ReactNode }) {
       // Private browsing or blocked storage — the theme still applies for this visit.
     }
   }, [theme]);
-
-  // Follow the OS while the visitor has not made an explicit choice.
-  useEffect(() => {
-    let stored: string | null;
-
-    try {
-      stored = localStorage.getItem(STORAGE_KEY);
-    } catch {
-      stored = null;
-    }
-
-    if (stored) {
-      return;
-    }
-
-    const query = window.matchMedia("(prefers-color-scheme: dark)");
-
-    function handleChange(event: MediaQueryListEvent) {
-      setTheme(event.matches ? "dark" : "light");
-    }
-
-    query.addEventListener("change", handleChange);
-
-    return () => query.removeEventListener("change", handleChange);
-  }, []);
 
   const toggleTheme = useCallback(() => {
     setTheme((current) => (current === "dark" ? "light" : "dark"));
