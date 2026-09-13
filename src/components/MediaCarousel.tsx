@@ -1,15 +1,23 @@
 import { useCallback, useEffect, useRef, useState } from "react";
+import { focusFor } from "../data/content";
 import type { MediaItem } from "../data/content";
 import "./MediaCarousel.css";
 
 /** Milliseconds between automatic turns, matching the home page rotator. */
 const ROTATE_INTERVAL = 3000;
 
+/** Upper bound on the zoom-out, in case `animationend` never fires. */
+const CLOSE_FALLBACK_MS = 1000;
+
 type MediaCarouselProps = {
   items: MediaItem[];
   /** Used for the carousel's accessible name. */
   label: string;
 };
+
+function prefersReducedMotion() {
+  return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+}
 
 /** The still frame — the same image box the detail pages used before. */
 function MediaFrame({ item }: { item: MediaItem }) {
@@ -29,12 +37,47 @@ function MediaFrame({ item }: { item: MediaItem }) {
   return <img className="media-frame-el" src={item.src} alt={item.alt} />;
 }
 
+function ArrowIcon({ direction }: { direction: "left" | "right" }) {
+  return (
+    <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+      <path
+        d={direction === "left" ? "M15 6l-6 6 6 6" : "M9 6l6 6-6 6"}
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.75"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
+/** Three panels — a front card between two receding ones — reading as "carousel". */
+function CarouselIcon() {
+  return (
+    <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+      <g
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.6"
+        strokeLinejoin="round"
+      >
+        <rect x="1.8" y="7.5" width="3.9" height="9" rx="1" />
+        <rect x="7.6" y="4.5" width="8.8" height="15" rx="1.6" />
+        <rect x="18.3" y="7.5" width="3.9" height="9" rx="1" />
+      </g>
+    </svg>
+  );
+}
+
 function MediaCarousel({ items, label }: MediaCarouselProps) {
   const [active, setActive] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
   const [isExpanded, setIsExpanded] = useState(false);
+  const [isClosing, setIsClosing] = useState(false);
   const backRef = useRef<HTMLButtonElement>(null);
-  const returnFocusRef = useRef<HTMLElement | null>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const focusCardOnReturn = useRef(false);
 
   const count = items.length;
   const hasMany = count > 1;
@@ -47,7 +90,7 @@ function MediaCarousel({ items, label }: MediaCarouselProps) {
     [count]
   );
 
-  // Auto-rotation. Suspended while interacting, while the still frame is
+  // Auto-rotation. Suspended while interacting, while the image box is
   // showing, and whenever the visible item is a video — turning away from a
   // playing clip would be hostile.
   useEffect(() => {
@@ -55,7 +98,7 @@ function MediaCarousel({ items, label }: MediaCarouselProps) {
       return;
     }
 
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    if (prefersReducedMotion()) {
       return;
     }
 
@@ -66,43 +109,79 @@ function MediaCarousel({ items, label }: MediaCarouselProps) {
     return () => window.clearInterval(timer);
   }, [hasMany, isPaused, isExpanded, current.type, count]);
 
-  const collapse = useCallback(() => {
-    setIsExpanded(false);
-    // Send focus back to the card that was clicked, not the top of the page.
-    returnFocusRef.current?.focus();
-  }, []);
-
   function expand(index: number) {
-    returnFocusRef.current = document.activeElement as HTMLElement | null;
     setActive(index);
+    setIsClosing(false);
     setIsExpanded(true);
   }
 
-  // Escape returns to the carousel, mirroring the button.
+  const finishCollapse = useCallback(() => {
+    setIsClosing(false);
+    setIsExpanded(false);
+    focusCardOnReturn.current = true;
+  }, []);
+
+  // Closing plays the zoom-out first and swaps back to the carousel when it
+  // ends. Reduced motion skips straight to the swap.
+  const collapse = useCallback(() => {
+    if (prefersReducedMotion()) {
+      finishCollapse();
+      return;
+    }
+
+    setIsClosing(true);
+  }, [finishCollapse]);
+
+  // Safety net: if the animation never reports finishing, still close.
+  useEffect(() => {
+    if (!isClosing) {
+      return;
+    }
+
+    const timer = window.setTimeout(finishCollapse, CLOSE_FALLBACK_MS);
+
+    return () => window.clearTimeout(timer);
+  }, [isClosing, finishCollapse]);
+
+  // Back in the carousel: return focus to the front card, not the page top.
+  useEffect(() => {
+    if (isExpanded || !focusCardOnReturn.current) {
+      return;
+    }
+
+    focusCardOnReturn.current = false;
+    containerRef.current
+      ?.querySelector<HTMLButtonElement>(".media-card.is-active")
+      ?.focus({ preventScroll: true });
+  }, [isExpanded]);
+
+  // Keyboard in the image box: Escape closes, arrows step through the images.
   useEffect(() => {
     if (!isExpanded) {
       return;
     }
 
-    backRef.current?.focus();
+    backRef.current?.focus({ preventScroll: true });
 
     function handleKey(event: KeyboardEvent) {
       if (event.key === "Escape") {
         event.preventDefault();
         collapse();
+      } else if (event.key === "ArrowRight") {
+        event.preventDefault();
+        setActive((value) => (value + 1) % count);
+      } else if (event.key === "ArrowLeft") {
+        event.preventDefault();
+        setActive((value) => (value - 1 + count) % count);
       }
     }
 
     window.addEventListener("keydown", handleKey);
 
     return () => window.removeEventListener("keydown", handleKey);
-  }, [isExpanded, collapse]);
+  }, [isExpanded, collapse, count]);
 
   function handleStageKey(event: React.KeyboardEvent<HTMLDivElement>) {
-    if (!hasMany) {
-      return;
-    }
-
     if (event.key === "ArrowRight") {
       event.preventDefault();
       go(active + 1);
@@ -123,38 +202,62 @@ function MediaCarousel({ items, label }: MediaCarouselProps) {
 
   if (isExpanded) {
     return (
-      <div className="media-carousel is-expanded">
-        <figure className="media-frame">
-          <MediaFrame item={current} />
+      <div className="media-carousel is-expanded" ref={containerRef}>
+        <figure
+          className={`media-frame${isClosing ? " is-closing" : ""}`}
+          onAnimationEnd={(event) => {
+            // Only the frame's own zoom-out — the image swap inside it also
+            // fires animationend, and that must not close the box.
+            if (
+              isClosing &&
+              event.target === event.currentTarget &&
+              event.animationName === "media-zoom-out"
+            ) {
+              finishCollapse();
+            }
+          }}
+        >
+          {/* Keyed by index so changing image replays the swap animation. */}
+          <div className="media-frame-swap" key={active}>
+            <MediaFrame item={current} />
+          </div>
 
+          {/* Outside the keyed wrapper, so it stays put while images swap. */}
           <button
             type="button"
             className="media-back"
             onClick={collapse}
             ref={backRef}
+            aria-label="Back to carousel"
+            title="Back to carousel"
           >
-            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-              <path
-                d="M4 8V4h4M20 16v4h-4M20 8V4h-4M4 16v4h4"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="1.75"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-            </svg>
-            Back to carousel
+            <CarouselIcon />
+          </button>
+        </figure>
+
+        <div className="media-controls">
+          <button
+            type="button"
+            className="rotator-arrow"
+            onClick={() => go(active - 1)}
+            aria-label="Previous image"
+          >
+            <ArrowIcon direction="left" />
           </button>
 
-          <figcaption className="media-caption">
-            {current.alt}
-            {hasMany && (
-              <span className="media-count">
-                {active + 1} / {count}
-              </span>
-            )}
-          </figcaption>
-        </figure>
+          <span className="media-count" aria-live="polite">
+            {active + 1} / {count}
+          </span>
+
+          <button
+            type="button"
+            className="rotator-arrow"
+            onClick={() => go(active + 1)}
+            aria-label="Next image"
+          >
+            <ArrowIcon direction="right" />
+          </button>
+        </div>
       </div>
     );
   }
@@ -162,6 +265,7 @@ function MediaCarousel({ items, label }: MediaCarouselProps) {
   return (
     <div
       className="media-carousel"
+      ref={containerRef}
       onMouseEnter={() => setIsPaused(true)}
       onMouseLeave={() => setIsPaused(false)}
       onFocusCapture={() => setIsPaused(true)}
@@ -212,6 +316,7 @@ function MediaCarousel({ items, label }: MediaCarouselProps) {
                   src={item.src}
                   alt=""
                   className="media-thumb"
+                  style={{ objectPosition: focusFor(item.src) }}
                   loading={index === 0 ? "eager" : "lazy"}
                   decoding="async"
                 />
@@ -219,6 +324,7 @@ function MediaCarousel({ items, label }: MediaCarouselProps) {
                 <>
                   <video
                     className="media-thumb"
+                    style={{ objectPosition: focusFor(item.poster ?? item.src) }}
                     src={item.src}
                     poster={item.poster}
                     muted
@@ -256,16 +362,7 @@ function MediaCarousel({ items, label }: MediaCarouselProps) {
           onClick={() => go(active - 1)}
           aria-label="Previous item"
         >
-          <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-            <path
-              d="M15 6l-6 6 6 6"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="1.75"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-          </svg>
+          <ArrowIcon direction="left" />
         </button>
 
         <div className="rotator-dots">
@@ -287,16 +384,7 @@ function MediaCarousel({ items, label }: MediaCarouselProps) {
           onClick={() => go(active + 1)}
           aria-label="Next item"
         >
-          <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-            <path
-              d="M9 6l6 6-6 6"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="1.75"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-          </svg>
+          <ArrowIcon direction="right" />
         </button>
       </div>
     </div>

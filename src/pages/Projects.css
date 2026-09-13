@@ -19,6 +19,18 @@
   gap: 1.75rem;
 }
 
+/* An odd number of projects would leave a hole in the last row of a
+   two-column grid. The lone last card spans both columns as a wide banner
+   instead, so adding or removing a featured project never breaks the layout. */
+.projects-grid > .project-card:last-child:nth-child(odd) {
+  grid-column: 1 / -1;
+}
+
+.projects-grid > .project-card:last-child:nth-child(odd) .project-link {
+  aspect-ratio: 21 / 9;
+  min-height: 22rem;
+}
+
 @media (max-width: 900px) {
   .page {
     padding-block: 2.5rem 4rem;
@@ -30,6 +42,12 @@
 }
 
 @media (max-width: 640px) {
+  /* Single column: the banner treatment is unnecessary. */
+  .projects-grid > .project-card:last-child:nth-child(odd) .project-link {
+    aspect-ratio: 4 / 5;
+    min-height: 20rem;
+  }
+
   .projects-grid {
     grid-template-columns: 1fr;
     gap: 1.25rem;

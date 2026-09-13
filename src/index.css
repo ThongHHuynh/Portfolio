@@ -158,10 +158,12 @@ textarea {
 
 /* Shared layout + typography primitives used across every page. */
 .shell {
+  --shell-pad: 2rem;
+
   width: 100%;
   max-width: var(--shell);
   margin: 0 auto;
-  padding-inline: 2rem;
+  padding-inline: var(--shell-pad);
 }
 
 .eyebrow {
@@ -253,13 +255,13 @@ textarea {
 
 @media (max-width: 900px) {
   .shell {
-    padding-inline: 1.5rem;
+    --shell-pad: 1.5rem;
   }
 }
 
 @media (max-width: 640px) {
   .shell {
-    padding-inline: 1.25rem;
+    --shell-pad: 1.25rem;
   }
 }
 

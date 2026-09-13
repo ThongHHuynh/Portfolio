@@ -1,24 +1,20 @@
 .media-carousel {
+  /* Shared by the carousel stage and the opened image box, so switching
+     between them never changes the gallery's height. */
+  --media-stage-h: 34rem;
+  /* Height of the arrows-and-dots row, which the caption row replaces. */
+  --media-row-h: 2.4rem;
+
   display: grid;
   gap: 1.5rem;
   justify-items: center;
-  animation: media-fade 0.35s ease;
-}
-
-@keyframes media-fade {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
 }
 
 /* Dimensions copied from the home page rotator so the two match exactly. */
 .media-stage {
   position: relative;
   width: 100%;
-  height: 34rem;
+  height: var(--media-stage-h);
   perspective: 1600px;
   perspective-origin: 50% 50%;
   transform-style: preserve-3d;
@@ -150,6 +146,7 @@
   display: flex;
   align-items: center;
   gap: 1rem;
+  height: var(--media-row-h);
 }
 
 /* ---- Still frame: the image box the carousel opens into ---- */
@@ -164,17 +161,80 @@
   aspect-ratio: 16 / 10;
   display: grid;
   place-items: center;
-  animation: media-open 0.4s cubic-bezier(0.32, 0.72, 0, 1);
 }
 
-@keyframes media-open {
+/* Opened from the carousel: full width, same height as the stage it replaced.
+   It zooms up from roughly the front card's size to fit the box. */
+.media-carousel.is-expanded .media-frame {
+  width: 100%;
+  height: var(--media-stage-h);
+  aspect-ratio: auto;
+  transform-origin: 50% 50%;
+  animation: media-zoom-in 0.8s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.media-carousel.is-expanded .media-frame.is-closing {
+  animation: media-zoom-out 0.6s cubic-bezier(0.65, 0, 0.35, 1) both;
+}
+
+@keyframes media-zoom-in {
   from {
     opacity: 0;
-    transform: scale(0.985);
+    transform: scale(0.82);
   }
   to {
     opacity: 1;
-    transform: none;
+    transform: scale(1);
+  }
+}
+
+@keyframes media-zoom-out {
+  from {
+    opacity: 1;
+    transform: scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: scale(0.82);
+  }
+}
+
+/* Wraps the current image so stepping left/right replays a short zoom. */
+/* Pinned to the frame's box. As an in-flow grid item it grew to the photo's
+   natural height (a 4284x5712 phone shot rendered ~1450px tall inside a 544px
+   box), so object-fit: contain never got a box to fit into. */
+.media-frame-swap {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  animation: media-swap 0.6s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@keyframes media-swap {
+  from {
+    opacity: 0;
+    transform: scale(0.94);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* The carousel settles back in with a gentle scale when the box closes. */
+.media-carousel:not(.is-expanded) .media-stage {
+  animation: media-return 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@keyframes media-return {
+  from {
+    opacity: 0;
+    transform: scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
   }
 }
 
@@ -182,77 +242,69 @@
   width: 100%;
   height: 100%;
   display: block;
+  /* Never let a large photo's natural size push past the box. */
+  min-width: 0;
+  min-height: 0;
   /* contain, not cover: these photos are a mix of portrait and landscape and
      cropping them to a fixed frame cuts the subject out. */
   object-fit: contain;
+}
+
+/* Single-image pages put the photo straight in the frame — pin it the same way. */
+.media-frame--static .media-frame-el {
+  position: absolute;
+  inset: 0;
 }
 
 .media-frame video.media-frame-el {
   background: #000;
 }
 
-/* Small control that returns to the rotating carousel. */
+/* Returns to the rotating carousel. A frosted icon button in the image's
+   top-right corner — dark glass stays legible over light and dark photos. */
 .media-back {
   position: absolute;
   top: 1rem;
   right: 1rem;
   z-index: 2;
-  display: inline-flex;
-  align-items: center;
-  gap: 0.45rem;
-  padding: 0.5rem 0.9rem;
-  border: 1px solid rgba(255, 255, 255, 0.24);
+  display: grid;
+  place-items: center;
+  width: 2.6rem;
+  height: 2.6rem;
+  padding: 0;
+  border: 1px solid rgba(255, 255, 255, 0.26);
   border-radius: 999px;
-  background: rgba(20, 20, 22, 0.5);
+  background: rgba(20, 20, 22, 0.48);
   -webkit-backdrop-filter: blur(14px) saturate(160%);
   backdrop-filter: blur(14px) saturate(160%);
   color: #fff;
-  font-size: 0.8rem;
   cursor: pointer;
-  transition: background 0.2s ease, border-color 0.2s ease;
+  transition: background 0.25s ease, border-color 0.25s ease,
+    transform 0.25s ease;
 }
 
 .media-back:hover {
-  background: rgba(20, 20, 22, 0.72);
-  border-color: rgba(255, 255, 255, 0.45);
+  background: rgba(20, 20, 22, 0.7);
+  border-color: rgba(255, 255, 255, 0.5);
+  transform: scale(1.06);
 }
 
 .media-back svg {
-  width: 0.9rem;
-  height: 0.9rem;
-}
-
-.media-caption {
-  position: absolute;
-  left: 1rem;
-  bottom: 1rem;
-  z-index: 2;
-  display: inline-flex;
-  align-items: baseline;
-  gap: 0.6rem;
-  padding: 0.45rem 0.85rem;
-  border: 1px solid rgba(255, 255, 255, 0.18);
-  border-radius: 999px;
-  background: rgba(20, 20, 22, 0.5);
-  -webkit-backdrop-filter: blur(14px) saturate(160%);
-  backdrop-filter: blur(14px) saturate(160%);
-  color: #fff;
-  font-size: 0.8rem;
+  width: 1.3rem;
+  height: 1.3rem;
 }
 
 .media-count {
-  color: rgba(255, 255, 255, 0.7);
-}
-
-/* A lone image needs no controls, so it carries no overlay furniture. */
-.media-frame--static .media-caption,
-.media-frame--static .media-back {
-  display: none;
+  min-width: 3rem;
+  font-size: 0.85rem;
+  color: var(--ink-faint);
+  text-align: center;
+  font-variant-numeric: tabular-nums;
 }
 
 @media (max-width: 900px) {
-  .media-stage {
-    height: 24rem;
+  .media-carousel {
+    --media-stage-h: 24rem;
   }
 
   .media-card {
@@ -268,8 +320,8 @@
 }
 
 @media (max-width: 640px) {
-  .media-stage {
-    height: 19rem;
+  .media-carousel {
+    --media-stage-h: 19rem;
   }
 
   .media-frame {
@@ -286,8 +338,10 @@
     transition: opacity 0.2s ease;
   }
 
-  .media-carousel,
-  .media-frame {
+  .media-carousel .media-frame,
+  .media-carousel .media-frame.is-closing,
+  .media-frame-swap,
+  .media-carousel:not(.is-expanded) .media-stage {
     animation: none;
   }
 }

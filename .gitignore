@@ -22,3 +22,6 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Full-size source photos, kept locally; the site uses the optimized copies in src/assets
+_originals/

@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import { focusFor } from "../data/content";
 import type { Project } from "../data/content";
 import "./ProjectCard.css";
 
@@ -16,6 +17,7 @@ function ProjectCard({ project, eager = false }: ProjectCardProps) {
             src={project.image}
             alt={`${project.name} — ${project.subtitle}`}
             className="project-image"
+            style={{ objectPosition: focusFor(project.image) }}
             loading={eager ? "eager" : "lazy"}
             decoding="async"
           />

@@ -1,13 +1,72 @@
 import amrImage from "../assets/AMR.jpg";
+import sensq2 from "../assets/SensQ-2.jpg";
+import sensq3 from "../assets/SensQ-3.jpg";
 import armImage from "../assets/Arm.jpg";
+import arm1 from "../assets/6-DOF-1.png";
+import arm2 from "../assets/6-DOF-2.jpg";
+import arm3 from "../assets/6-DOF-3.png";
 import boltEyeImage from "../assets/BoltEye.jpg";
+import boltEye1 from "../assets/BoltEye-1.jpg";
+import boltEye2 from "../assets/BoltEye-2.jpg";
 import demoFestImage from "../assets/DemoFest.jpg";
 import droneImage from "../assets/Drone.jpg";
+import drone1 from "../assets/Drone-1.jpg";
+import drone2 from "../assets/Drone-2.jpg";
 import iyrcImage from "../assets/IYRC.jpg";
-import makeXImage from "../assets/MakeX.jpg";
-import marsLabImage from "../assets/MarsLab.jpeg";
+import iyrc1 from "../assets/IYRC1.jpg";
+import iyrc3 from "../assets/IYRC3.jpg";
+import makeXImage from "../assets/MAKEX.JPG";
+import makeX1 from "../assets/MAKEX1.JPG";
+import Isaac1 from "../assets/Isaac-1.png";
+import Isaac2 from "../assets/Isaac-2.png";
+import eyeq1 from "../assets/EyeQ-1.jpg";
+import eyeq2 from "../assets/EyeQ-2.jpg";
 import pegasusImage from "../assets/Pegasus.jpeg";
+import pegasus3 from "../assets/Pegasus-3.jpg";
+import pegasus4 from "../assets/Pegasus-4.jpg";
+import pegasus5 from "../assets/Pegasus-5.jpg";
+import pegasusVideo from "../assets/Pegasus-1.MOV";
 import portraitImage from "../assets/Portrait.jpg";
+
+/**
+ * Where to crop each photo in cards and carousels, as a CSS object-position:
+ * "x% y%". "50% 50%" crops from the centre; raise y to keep more of the
+ * bottom of the photo, raise x to keep more of the right. Set by where the
+ * subject sits in each shot. A photo missing from this list crops centred.
+ */
+const imageFocus: Record<string, string> = {
+  [amrImage]: "50% 78%", // AMR.jpg
+  [sensq2]: "50% 82%", // SensQ-2.jpg
+  [sensq3]: "50% 50%", // SensQ-3.jpg
+  [armImage]: "50% 63%", // Arm.jpg
+  [arm1]: "50% 50%", // 6-DOF-1.png
+  [arm2]: "50% 50%", // 6-DOF-2.jpg
+  [arm3]: "50% 50%", // 6-DOF-3.png
+  [boltEyeImage]: "40% 50%", // BoltEye.jpg
+  [boltEye1]: "50% 63%", // BoltEye-1.jpg
+  [boltEye2]: "50% 50%", // BoltEye-2.jpg
+  [demoFestImage]: "50% 77%", // DemoFest.jpg
+  [droneImage]: "100% 50%", // Drone.jpg
+  [drone1]: "50% 50%", // Drone-1.jpg
+  [drone2]: "50% 50%", // Drone-2.jpg
+  [iyrcImage]: "50% 50%", // IYRC.jpg
+  [iyrc1]: "50% 50%", // IYRC1.jpg
+  [iyrc3]: "50% 44%", // IYRC3.jpg
+  [makeXImage]: "50% 50%", // MAKEX.JPG
+  [makeX1]: "35% 50%", // MAKEX1.JPG
+  [Isaac1]: "45% 50%", // Isaac-1.png
+  [Isaac2]: "50% 50%", // Isaac-2.png
+  [eyeq1]: "50% 50%", // EyeQ-1.jpg
+  [eyeq2]: "50% 50%", // EyeQ-2.jpg
+  [pegasusImage]: "50% 66%", // Pegasus.jpeg
+  [pegasus3]: "50% 77%", // Pegasus-3.jpg
+  [pegasus4]: "50% 55%", // Pegasus-4.jpg
+  [pegasus5]: "50% 50%", // Pegasus-5.jpg
+};
+
+export function focusFor(src: string | undefined): string | undefined {
+  return src ? imageFocus[src] : undefined;
+}
 
 /**
  * A gallery item on a detail page. Entries may carry several — images, video,
@@ -64,6 +123,8 @@ export const contact = {
   github: "https://github.com/ThongHHuynh/",
   githubHandle: "ThongHHuynh",
   resume: "/Thong_Huynh_Resume.pdf",
+  /** Resume + portfolio slides. Regenerate with tools/portfolio/build_portfolio.py. */
+  resumePortfolio: "/Thong_Huynh_Resume_Portfolio.pdf",
 };
 
 export const education = {
@@ -135,6 +196,11 @@ export const sideQuests: SideQuestEntry[] = [
     result: "First Prize",
     year: "2019",
     image: iyrcImage,
+    media: [
+      { type: "image", src: iyrcImage, alt: "On stage at IYRC 2019 in Korea" },
+      { type: "image", src: iyrc1, alt: "The two competition robots, side by side" },
+      { type: "image", src: iyrc3, alt: "Running the line-following course at IYRC" },
+    ],
     description:
       "Competed at IYRC with a volleyball-playing robot and a line-following robot, taking first prize. The competition that started all of this.",
     tools: [
@@ -163,6 +229,10 @@ export const sideQuests: SideQuestEntry[] = [
     result: "Innovative Design",
     year: "2019",
     image: makeXImage,
+    media: [
+      { type: "image", src: makeXImage, alt: "Receiving the award at MakeX Robotics Competition 2019" },
+      { type: "image", src: makeX1, alt: "Setting up the robot on the MakeX field" },
+    ],
     description:
       "Designed a moon-mission robot for MakeX and was recognised for innovative design — an early lesson in building mechanisms for a scored objective.",
     tools: [
@@ -190,6 +260,11 @@ export const sideQuests: SideQuestEntry[] = [
     result: "For the fun of it",
     year: "Ongoing",
     image: droneImage,
+    media: [
+      { type: "image", src: droneImage, alt: "FPV drone build" },
+      { type: "image", src: drone2, alt: "Ducted FPV quad from above, flight controller exposed" },
+      { type: "image", src: drone1, alt: "Soldering the motor wires to the ESC" },
+    ],
     description:
       "Building and flying FPV drones. Nothing to win here — just the fastest way I know to learn about control, tuning and repairing your own hardware.",
     tools: [
@@ -345,12 +420,82 @@ export function galleryFor(entry: {
 
 export const projects: Project[] = [
   {
+    slug: "digital-twin",
+    name: "Digital Twin Work Cell",
+    subtitle: "Isaac Sim Validation Pipeline",
+    period: "May 2026 – Present",
+    context: "ABI Ltd.",
+    image: Isaac1,
+    summary:
+      "A high-fidelity NVIDIA Isaac Sim twin of an ABB IRB1200 bread-scoring cell, used to validate sensors and path planning before anything is deployed to the floor.",
+    tools: ["NVIDIA Isaac Sim", "ABB IRB1200", "ROS 2", "Python"],
+    media: [
+      { type: "image", src: Isaac1, alt: "Digital twin work cell in NVIDIA Isaac Sim" },
+      { type: "image", src: Isaac2, alt: "Digital twin work cell, second view" },
+    ],
+    overview: [
+      "Commissioning an industrial work cell on the factory floor is slow and expensive. This digital twin moves that validation into simulation, where a bad path plan costs a re-run instead of a damaged product line.",
+      "The twin models the ABB IRB1200 arm, the conveyor, and the sensor placement closely enough that planning and timing work carries over to the real cell.",
+    ],
+    highlights: [
+      "Built end-to-end digital twins of industrial robotic work cells in NVIDIA Isaac Sim.",
+      "Validated sensor placement and path planning ahead of physical deployment.",
+      "Supported integration of 6-DOF ABB robotic arms for high-speed automated bread-scoring.",
+      "Shortened the validation loop between a proposed cell layout and a working configuration.",
+    ],
+    skills: [
+      "Simulation and digital twins",
+      "Robot cell commissioning",
+      "Path planning validation",
+      "Sensor placement",
+    ],
+    featured: true,
+  },
+  {
+    slug: "eyeq",
+    name: "EyeQ",
+    subtitle: "AI Bakery Inspection Model",
+    period: "May 2026 – Present",
+    context: "ABI Ltd.",
+    image: eyeq1,
+    summary:
+      "An in-house, two-stage vision model that inspects bakery products on the line in under 100ms — replacing an outsourced service and cutting $100K in costs.",
+    tools: ["YOLO", "CNN", "PyTorch", "Python"],
+    media: [
+      { type: "image", src: eyeq1, alt: "EyeQ flagging overlapping and touching pieces on the conveyor" },
+      { type: "image", src: eyeq2, alt: "EyeQ output: misshapen, overlap, touching and bad-tip detections" },
+    ],
+    overview: [
+      "EyeQ is ABI's in-house AI model for inspecting bakery products as they move down the production line. It looks at every piece on the conveyor and decides which ones pass and which need attention.",
+      "It works in two stages: a YOLO model detects and segments each piece, then a CNN head classifies it. Keeping the whole pipeline under 100ms lets it keep pace with the line, and building it in-house replaced an outsourced inspection service.",
+    ],
+    highlights: [
+      "Architected a two-stage pipeline — YOLO detection and segmentation followed by a CNN classification head.",
+      "Reached under 100ms inference latency, fast enough for a live production line.",
+      "Flags pieces that are misshapen, overlapping, touching or have a bad tip, and detects the scoring slits, each with a confidence score.",
+      "Brought inspection in-house, cutting $100K in outsourcing costs.",
+    ],
+    skills: [
+      "Computer vision",
+      "Instance segmentation",
+      "Model architecture",
+      "Real-time inference",
+      "Production ML deployment",
+    ],
+    featured: true,
+  },
+  {
     slug: "sensq",
     name: "SensQ",
     subtitle: "Autonomous Mobile Robot Platform",
     period: "January 2026 – Present",
     context: "Independent project",
     image: amrImage,
+    media: [
+      { type: "image", src: amrImage, alt: "Early SensQ prototype with RViz running" },
+      { type: "image", src: sensq2, alt: "The finished SensQ platform with its LiDAR" },
+      { type: "image", src: sensq3, alt: "SensQ opened up: compute, motor drivers and wiring" },
+    ],
     summary:
       "A compact autonomous mobile robot built for warehouse and SME automation, from the physical hardware up through the full ROS 2 navigation stack.",
     tools: ["ROS 2", "Nav2", "SLAM Toolbox", "AprilTag", "Python"],
@@ -380,6 +525,11 @@ export const projects: Project[] = [
     period: "August 2025 – Present",
     context: "Independent project",
     image: boltEyeImage,
+    media: [
+      { type: "image", src: boltEyeImage, alt: "CAD render of the Bolt Eye conveyor inspection system" },
+      { type: "image", src: boltEye1, alt: "The built conveyor and overhead camera rig" },
+      { type: "image", src: boltEye2, alt: "Detections and pass/fail classifications on bolts" },
+    ],
     summary:
       "An intelligent computer vision system that detects and classifies surface defects on live production lines at sub-100ms latency.",
     tools: ["YOLOv11", "Mask R-CNN", "DINOv2", "OpenCV", "PyTorch"],
@@ -403,40 +553,19 @@ export const projects: Project[] = [
     featured: true,
   },
   {
-    slug: "digital-twin",
-    name: "Digital Twin Work Cell",
-    subtitle: "Isaac Sim Validation Pipeline",
-    period: "May 2026 – Present",
-    context: "ABI Ltd.",
-    image: marsLabImage,
-    summary:
-      "A high-fidelity NVIDIA Isaac Sim twin of an ABB IRB1200 bread-scoring cell, used to validate sensors and path planning before anything is deployed to the floor.",
-    tools: ["NVIDIA Isaac Sim", "ABB IRB1200", "ROS 2", "Python"],
-    overview: [
-      "Commissioning an industrial work cell on the factory floor is slow and expensive. This digital twin moves that validation into simulation, where a bad path plan costs a re-run instead of a damaged product line.",
-      "The twin models the ABB IRB1200 arm, the conveyor, and the sensor placement closely enough that planning and timing work carries over to the real cell.",
-    ],
-    highlights: [
-      "Built end-to-end digital twins of industrial robotic work cells in NVIDIA Isaac Sim.",
-      "Validated sensor placement and path planning ahead of physical deployment.",
-      "Supported integration of 6-DOF ABB robotic arms for high-speed automated bread-scoring.",
-      "Shortened the validation loop between a proposed cell layout and a working configuration.",
-    ],
-    skills: [
-      "Simulation and digital twins",
-      "Robot cell commissioning",
-      "Path planning validation",
-      "Sensor placement",
-    ],
-    featured: true,
-  },
-  {
     slug: "pegasus",
     name: "Pegasus",
     subtitle: "Hybrid Multimodal Quadruped",
     period: "May 2025 – May 2026",
     context: "MARS Lab",
     image: pegasusImage,
+    media: [
+      { type: "image", src: pegasusImage, alt: "Pegasus mounted on its test stand at MARS Lab" },
+      { type: "image", src: pegasus4, alt: "Pegasus standing, with its kinematics model on screen" },
+      { type: "image", src: pegasus5, alt: "Top-down view of Pegasus: servos, frame and wiring" },
+      { type: "image", src: pegasus3, alt: "Pegasus on the bench with its depth camera and onboard compute" },
+      { type: "video", src: pegasusVideo, poster: pegasus4, alt: "Video of Pegasus" },
+    ],
     summary:
       "A hybrid walking-and-flying robotic platform combining quadruped locomotion with aerial mobility, developed as a research assistant at MARS Lab.",
     tools: ["ROS", "Gazebo", "PX4/MAVROS", "OctoMap", "SolidWorks"],
@@ -466,6 +595,12 @@ export const projects: Project[] = [
     period: "May 2024 – January 2026",
     context: "Independent project",
     image: armImage,
+    media: [
+      { type: "image", src: armImage, alt: "The 6-DOF robotic arm" },
+      { type: "image", src: arm1, alt: "CAD render of the arm and its base" },
+      { type: "image", src: arm3, alt: "Side view with the kinematic frame points marked" },
+      { type: "image", src: arm2, alt: "The arm working alongside a small conveyor" },
+    ],
     summary:
       "A functional six-degree-of-freedom robotic arm with custom kinematics and optimization-based path planning, visualized and validated in ROS.",
     tools: ["ROS", "RViz", "Python", "L-BFGS-B", "SolidWorks"],

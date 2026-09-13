@@ -15,9 +15,7 @@ function Projects() {
         <p className="eyebrow">Projects</p>
         <h1>Things I've designed, built and shipped</h1>
         <p className="lead">
-          A mix of independent builds and work I've done in industry and
-          research. Each one started as a problem worth solving rather than a
-          demo worth showing.
+          A mix of independent builds and work I've done in industry and research.
         </p>
       </header>
 

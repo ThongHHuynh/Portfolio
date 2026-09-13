@@ -44,7 +44,8 @@
   height: 100%;
   display: block;
   object-fit: cover;
-  object-position: 50% 30%;
+  /* Face sits ~61% down the photo; this centres it in the circle. */
+  object-position: 50% 83%;
 }
 
 .where-section {
@@ -156,6 +157,18 @@
   gap: 1.75rem;
 }
 
+/* An odd number of projects would leave a hole in the last row of a
+   two-column grid. The lone last card spans both columns as a wide banner
+   instead, so adding or removing a featured project never breaks the layout. */
+.featured-grid > .project-card:last-child:nth-child(odd) {
+  grid-column: 1 / -1;
+}
+
+.featured-grid > .project-card:last-child:nth-child(odd) .project-link {
+  aspect-ratio: 21 / 9;
+  min-height: 22rem;
+}
+
 .quests-section {
   padding-block: 5rem;
 }
@@ -201,6 +214,12 @@
 }
 
 @media (max-width: 640px) {
+  /* Single column: the banner treatment is unnecessary. */
+  .featured-grid > .project-card:last-child:nth-child(odd) .project-link {
+    aspect-ratio: 4 / 5;
+    min-height: 20rem;
+  }
+
   .featured-grid {
     grid-template-columns: 1fr;
   }

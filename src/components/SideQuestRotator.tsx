@@ -1,10 +1,10 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { sideQuests } from "../data/content";
+import { focusFor, sideQuests } from "../data/content";
 import "./SideQuestRotator.css";
 
 /** Milliseconds between automatic turns. */
-const ROTATE_INTERVAL = 3000;
+const ROTATE_INTERVAL = 2000;
 
 function SideQuestRotator() {
   const [active, setActive] = useState(0);
@@ -110,6 +110,7 @@ function SideQuestRotator() {
                 src={entry.image}
                 alt=""
                 className="rotator-image"
+                style={{ objectPosition: focusFor(entry.image) }}
                 loading="lazy"
                 decoding="async"
               />

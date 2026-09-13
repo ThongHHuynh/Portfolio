@@ -3,6 +3,7 @@ import {
   awards,
   competitions,
   extracurriculars,
+  focusFor,
   sideQuests,
 } from "../data/content";
 import usePageTitle from "../hooks/usePageTitle";
@@ -38,6 +39,7 @@ function SideQuest() {
                     src={entry.image}
                     alt={`${entry.name} — ${entry.event}`}
                     className="quest-image"
+                    style={{ objectPosition: focusFor(entry.image) }}
                     loading={index < 2 ? "eager" : "lazy"}
                     decoding="async"
                   />
