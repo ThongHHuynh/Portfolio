@@ -87,12 +87,15 @@ html {
      the designed size. */
   -webkit-text-size-adjust: 100%;
   text-size-adjust: 100%;
-  /* Panning is all the page allows: naming only pan-x and pan-y here drops
-     pinch-zoom and double-tap zoom for every descendant, since a touch's
-     effective behaviour is the intersection of this and each element below
-     it. The viewport tag and the gesture listeners in index.html cover the
-     browsers that ignore this. */
-  touch-action: pan-x pan-y;
+  /* Scrolling down the page is the only touch gesture there is. Nothing here
+     scrolls sideways, so pan-x only ever let a finger drag the document off
+     centre — against the carousel side cards, which reach about 100px past
+     the viewport and were merely being clipped by body's overflow-x. Naming
+     one behaviour also drops pinch-zoom and double-tap zoom for the whole
+     document: a touch's effective behaviour is the intersection of this and
+     every element below it. The viewport tag and the gesture listeners in
+     index.html cover the browsers that ignore this. */
+  touch-action: pan-y;
 }
 
 body {
@@ -162,12 +165,12 @@ textarea {
   font: inherit;
 }
 
-/* Redundant alongside the root's pan-x pan-y, and kept because it states the
-   intent at the element that has it: two taps inside the double-tap window
-   must never zoom, and this site invites exactly that — stepping through a
-   carousel tap by tap, nudging a dot twice. The tap highlight goes with it:
-   the site draws its own press states, and the default grey flood over a
-   whole project card reads as a rendering fault. */
+/* The same single behaviour the root allows, restated on the controls that
+   most invite a stray second gesture — stepping through a carousel tap by
+   tap, nudging a dot twice — so it holds even where the root's value is not.
+   The tap highlight goes with it: the site draws its own press states, and
+   the default grey flood over a whole project card reads as a rendering
+   fault. */
 a,
 button,
 input,
@@ -176,7 +179,7 @@ select,
 summary,
 [role="button"],
 [role="tab"] {
-  touch-action: manipulation;
+  touch-action: pan-y;
   -webkit-tap-highlight-color: transparent;
 }
 
