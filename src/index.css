@@ -84,9 +84,15 @@ html {
   scroll-padding-top: var(--header-h);
   /* iOS and Android inflate the text of wide blocks on their own — most
      visibly after a rotation — which reads as the page zooming itself. Hold
-     the designed size. Deliberate pinch zoom is untouched. */
+     the designed size. */
   -webkit-text-size-adjust: 100%;
   text-size-adjust: 100%;
+  /* Panning is all the page allows: naming only pan-x and pan-y here drops
+     pinch-zoom and double-tap zoom for every descendant, since a touch's
+     effective behaviour is the intersection of this and each element below
+     it. The viewport tag and the gesture listeners in index.html cover the
+     browsers that ignore this. */
+  touch-action: pan-x pan-y;
 }
 
 body {
@@ -156,11 +162,11 @@ textarea {
   font: inherit;
 }
 
-/* Two taps inside the double-tap window zoom the page in on iOS and Android,
-   and this site invites exactly that — stepping through a carousel tap by
-   tap, nudging a dot twice. Every control opts out of double-tap zoom;
-   deliberate pinch zoom still works everywhere. The tap highlight goes with
-   it: the site draws its own press states, and the default grey flood over a
+/* Redundant alongside the root's pan-x pan-y, and kept because it states the
+   intent at the element that has it: two taps inside the double-tap window
+   must never zoom, and this site invites exactly that — stepping through a
+   carousel tap by tap, nudging a dot twice. The tap highlight goes with it:
+   the site draws its own press states, and the default grey flood over a
    whole project card reads as a rendering fault. */
 a,
 button,

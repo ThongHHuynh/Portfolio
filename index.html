@@ -3,7 +3,10 @@
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
     <meta name="theme-color" content="#faf9f6" />
 
     <title>Thong Huynh — Robotics Engineer</title>
@@ -22,6 +25,21 @@
     <meta name="twitter:card" content="summary_large_image" />
 
     <script>
+      // The page is locked at 1:1 — no pinch, no double-tap, in either
+      // direction. iOS Safari has ignored user-scalable in the viewport tag
+      // since iOS 10, and only honours the CSS touch-action on the root for
+      // some gestures, so its own pinch events are refused here as well.
+      // Android and the rest are covered by the meta tag and touch-action.
+      (function () {
+        var refuse = function (event) {
+          event.preventDefault();
+        };
+
+        ["gesturestart", "gesturechange", "gestureend"].forEach(function (name) {
+          document.addEventListener(name, refuse, { passive: false });
+        });
+      })();
+
       // Runs before first paint so a returning dark-mode visitor never sees a
       // white flash. The site defaults to light; only an explicit choice from
       // the toggle, remembered here, turns it dark.
