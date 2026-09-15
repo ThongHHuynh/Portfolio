@@ -9,8 +9,6 @@
 
   position: relative;
   overflow: hidden;
-  /* Vertical scrolling only, matching the root: the page does not zoom. */
-  touch-action: pan-y;
 }
 
 :root[data-theme="dark"] .hero-pool {

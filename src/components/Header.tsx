@@ -15,6 +15,7 @@ const COLLAPSE_DISTANCE = 160;
 
 function Header() {
   const headerRef = useRef<HTMLElement>(null);
+  const toggleRef = useRef<HTMLButtonElement>(null);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   function closeMenu() {
@@ -60,6 +61,45 @@ function Header() {
       }
     };
   }, []);
+
+  /**
+   * Dismiss the panel on anything that reads as "I'm done with this": a tap or
+   * click anywhere off the header, or Escape. Without it the only way out was
+   * the burger itself or following a link, so tapping the page to dismiss the
+   * menu — the thing everyone tries first — did nothing.
+   *
+   * pointerdown rather than click, so the panel is gone by the time whatever
+   * was underneath it reacts. The listener spans the whole header, so the
+   * panel's own links and the burger are unaffected; they close it themselves.
+   */
+  useEffect(() => {
+    if (!isMenuOpen) {
+      return;
+    }
+
+    function handlePointerDown(event: PointerEvent) {
+      if (!headerRef.current?.contains(event.target as Node)) {
+        setIsMenuOpen(false);
+      }
+    }
+
+    function handleKeyDown(event: KeyboardEvent) {
+      if (event.key === "Escape") {
+        setIsMenuOpen(false);
+        // Escape should leave focus somewhere sensible, not adrift in a panel
+        // that is no longer on screen.
+        toggleRef.current?.focus();
+      }
+    }
+
+    document.addEventListener("pointerdown", handlePointerDown);
+    document.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      document.removeEventListener("pointerdown", handlePointerDown);
+      document.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [isMenuOpen]);
 
   // Never leave the menu panel open behind a resize into the desktop layout.
   useEffect(() => {
@@ -123,6 +163,7 @@ function Header() {
           <button
             type="button"
             className="menu-toggle"
+            ref={toggleRef}
             aria-expanded={isMenuOpen}
             aria-controls="mobile-menu"
             aria-label={isMenuOpen ? "Close menu" : "Open menu"}

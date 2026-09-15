@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { focusFor, sideQuests } from "../data/content";
+import useSwipe from "../hooks/useSwipe";
 import "./SideQuestRotator.css";
 
 /** Milliseconds between automatic turns. */
@@ -9,6 +10,12 @@ const ROTATE_INTERVAL = 2000;
 function SideQuestRotator() {
   const [active, setActive] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
+  /**
+   * Set by the first swipe and never cleared. Touch has no hover for the
+   * pause above to hang off, so without this the ring would turn on its own
+   * two seconds after the visitor deliberately turned it themselves.
+   */
+  const [isHandled, setIsHandled] = useState(false);
   const trackRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
 
@@ -22,9 +29,14 @@ function SideQuestRotator() {
     [count]
   );
 
+  const { swipeProps, consumedTap } = useSwipe((direction) => {
+    setIsHandled(true);
+    go(active + direction);
+  });
+
   // Slow auto-rotation, suspended while the visitor is interacting.
   useEffect(() => {
-    if (isPaused) {
+    if (isPaused || isHandled) {
       return;
     }
 
@@ -37,7 +49,7 @@ function SideQuestRotator() {
     }, ROTATE_INTERVAL);
 
     return () => window.clearInterval(timer);
-  }, [isPaused, count]);
+  }, [isPaused, isHandled, count]);
 
   function handleKeyDown(event: React.KeyboardEvent<HTMLDivElement>) {
     if (event.key === "ArrowRight") {
@@ -65,6 +77,7 @@ function SideQuestRotator() {
         aria-label="Side quests"
         tabIndex={0}
         onKeyDown={handleKeyDown}
+        {...swipeProps}
       >
         {sideQuests.map((entry, index) => {
           // Shortest signed distance from the active card, so cards wrap
@@ -97,9 +110,19 @@ function SideQuestRotator() {
               }}
               aria-hidden={isHidden}
               tabIndex={isActive ? 0 : -1}
-              onClick={() =>
-                isActive ? navigate(`/side-quest/${entry.slug}`) : go(index)
-              }
+              onClick={() => {
+                // The click that ends a swipe must not also open the card the
+                // finger happened to lift over.
+                if (consumedTap()) {
+                  return;
+                }
+
+                if (isActive) {
+                  navigate(`/side-quest/${entry.slug}`);
+                } else {
+                  go(index);
+                }
+              }}
               aria-label={
                 isActive
                   ? `Open ${entry.name} — ${entry.event}, ${entry.result}`
@@ -142,14 +165,14 @@ function SideQuestRotator() {
         <button
           type="button"
           className="rotator-zone rotator-zone-prev"
-          onClick={() => go(active - 1)}
+          onClick={() => !consumedTap() && go(active - 1)}
           tabIndex={-1}
           aria-hidden="true"
         />
         <button
           type="button"
           className="rotator-zone rotator-zone-next"
-          onClick={() => go(active + 1)}
+          onClick={() => !consumedTap() && go(active + 1)}
           tabIndex={-1}
           aria-hidden="true"
         />

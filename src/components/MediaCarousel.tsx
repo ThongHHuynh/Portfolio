@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { focusFor } from "../data/content";
 import type { MediaItem } from "../data/content";
+import useSwipe from "../hooks/useSwipe";
 import "./MediaCarousel.css";
 
 /** Milliseconds between automatic turns, matching the home page rotator. */
@@ -73,6 +74,12 @@ function CarouselIcon() {
 function MediaCarousel({ items, label }: MediaCarouselProps) {
   const [active, setActive] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
+  /**
+   * Set by the first swipe and never cleared. Touch has no hover for the
+   * pause above to hang off, so without this the ring would turn on its own
+   * moments after the visitor deliberately turned it themselves.
+   */
+  const [isHandled, setIsHandled] = useState(false);
   const [isExpanded, setIsExpanded] = useState(false);
   const [isClosing, setIsClosing] = useState(false);
   const backRef = useRef<HTMLButtonElement>(null);
@@ -93,8 +100,19 @@ function MediaCarousel({ items, label }: MediaCarouselProps) {
   // Auto-rotation. Suspended while interacting, while the image box is
   // showing, and whenever the visible item is a video — turning away from a
   // playing clip would be hostile.
+  const { swipeProps, consumedTap } = useSwipe((direction) => {
+    setIsHandled(true);
+    go(active + direction);
+  });
+
   useEffect(() => {
-    if (!hasMany || isPaused || isExpanded || current.type === "video") {
+    if (
+      !hasMany ||
+      isPaused ||
+      isHandled ||
+      isExpanded ||
+      current.type === "video"
+    ) {
       return;
     }
 
@@ -107,7 +125,7 @@ function MediaCarousel({ items, label }: MediaCarouselProps) {
     }, ROTATE_INTERVAL);
 
     return () => window.clearInterval(timer);
-  }, [hasMany, isPaused, isExpanded, current.type, count]);
+  }, [hasMany, isPaused, isHandled, isExpanded, current.type, count]);
 
   function expand(index: number) {
     setActive(index);
@@ -205,6 +223,7 @@ function MediaCarousel({ items, label }: MediaCarouselProps) {
       <div className="media-carousel is-expanded" ref={containerRef}>
         <figure
           className={`media-frame${isClosing ? " is-closing" : ""}`}
+          {...swipeProps}
           onAnimationEnd={(event) => {
             // Only the frame's own zoom-out — the image swap inside it also
             // fires animationend, and that must not close the box.
@@ -278,6 +297,7 @@ function MediaCarousel({ items, label }: MediaCarouselProps) {
         aria-label={`${label} gallery`}
         tabIndex={0}
         onKeyDown={handleStageKey}
+        {...swipeProps}
       >
         {items.map((item, index) => {
           // Shortest signed distance, so the ring wraps rather than unwinding.
@@ -308,7 +328,19 @@ function MediaCarousel({ items, label }: MediaCarouselProps) {
               }}
               aria-hidden={isHidden}
               tabIndex={isActive ? 0 : -1}
-              onClick={() => (isActive ? expand(index) : go(index))}
+              onClick={() => {
+                // The click that ends a swipe must not also open the image the
+                // finger happened to lift over.
+                if (consumedTap()) {
+                  return;
+                }
+
+                if (isActive) {
+                  expand(index);
+                } else {
+                  go(index);
+                }
+              }}
               aria-label={isActive ? `Open ${item.alt}` : `Show ${item.alt}`}
             >
               {item.type === "image" ? (

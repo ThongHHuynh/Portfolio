@@ -15,9 +15,6 @@
   position: relative;
   width: 100%;
   height: var(--media-stage-h);
-  /* The ring is stepped through by tapping, so the stage must not treat two
-     quick taps as a gesture of its own. Vertical scrolling is all it passes. */
-  touch-action: pan-y;
   perspective: 1600px;
   perspective-origin: 50% 50%;
   transform-style: preserve-3d;
