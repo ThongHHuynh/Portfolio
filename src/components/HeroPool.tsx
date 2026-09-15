@@ -315,7 +315,11 @@ function HeroPool({ children, className = "", id }: HeroPoolProps) {
     layout();
     draw();
 
-    if (prefersReducedMotion) {
+    // Touch and pen never see the field — the reticle is fine-pointer only —
+    // yet the pointer events a scroll drag emits would run the whole spring
+    // simulation for every frame of that scroll. Leave the canvas sized and
+    // empty and skip the simulation entirely.
+    if (prefersReducedMotion || !hasFinePointer) {
       return () => {
         controller.abort();
         redrawRef.current = null;

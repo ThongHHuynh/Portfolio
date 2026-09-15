@@ -89,12 +89,23 @@ function CV() {
     let lastHeight = frame.clientHeight;
     let timer = 0;
 
+    // On phones the address bar sliding in and out resizes the viewport by
+    // 60-90px on nearly every change of scroll direction. Re-fitting on that
+    // would reload the PDF again and again while someone is reading it, so
+    // touch devices re-fit on width alone — a rotation, or the window
+    // genuinely changing shape.
+    const heightMatters = window.matchMedia("(pointer: fine)").matches;
+
     const observer = new ResizeObserver(() => {
       const width = frame.clientWidth;
       const height = frame.clientHeight;
 
       // Ignore sub-pixel jitter; only a real size change needs a re-fit.
-      if (Math.abs(width - lastWidth) < 8 && Math.abs(height - lastHeight) < 8) {
+      const widthChanged = Math.abs(width - lastWidth) >= 8;
+      const heightChanged =
+        heightMatters && Math.abs(height - lastHeight) >= 8;
+
+      if (!widthChanged && !heightChanged) {
         return;
       }
 

@@ -17,6 +17,9 @@
   position: relative;
   width: 100%;
   height: 34rem;
+  /* The ring is turned by tapping its side zones, so the stage must not read
+     two quick taps as a double-tap zoom. Vertical scrolling and pinch stay. */
+  touch-action: pan-y pinch-zoom;
   perspective: 1600px;
   perspective-origin: 50% 50%;
   transform-style: preserve-3d;
@@ -211,6 +214,7 @@
 }
 
 .rotator-dot {
+  position: relative;
   width: 0.5rem;
   height: 0.5rem;
   padding: 0;
@@ -219,6 +223,22 @@
   background: var(--line-strong);
   cursor: pointer;
   transition: background 0.3s ease, width 0.3s ease;
+}
+
+/* An 8px dot is far under a comfortable touch target, and a miss that lands
+   twice in quick succession is what the browser calls a double-tap. Grow the
+   hit area on touch without changing the dot, opening the row's gap first so
+   neighbouring targets still cannot overlap. */
+@media (pointer: coarse) {
+  .rotator-dots {
+    gap: 1rem;
+  }
+
+  .rotator-dot::after {
+    content: "";
+    position: absolute;
+    inset: -0.75rem -0.5rem;
+  }
 }
 
 .rotator-dot.is-active {

@@ -146,8 +146,10 @@
   transition: transform 0.25s ease;
 }
 
-.featured-all:hover svg {
-  transform: translateX(4px);
+@media (hover: hover) {
+  .featured-all:hover svg {
+    transform: translateX(4px);
+  }
 }
 
 /* Two across rather than three, so each card is meaningfully larger. */

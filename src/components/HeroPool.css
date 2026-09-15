@@ -9,7 +9,9 @@
 
   position: relative;
   overflow: hidden;
-  touch-action: pan-y;
+  /* pan-y on its own also blocked pinch zoom, so pinching anywhere over the
+     hero did nothing while it worked on the rest of the page. */
+  touch-action: pan-y pinch-zoom;
 }
 
 :root[data-theme="dark"] .hero-pool {

@@ -8,9 +8,14 @@
   transition: transform 0.35s ease, box-shadow 0.35s ease;
 }
 
-.project-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 18px 40px var(--shadow);
+/* Touch has no hover to leave: tapping a card latches :hover, so the card
+   stayed lifted and its photo stayed scaled up after the tap — the "zoom"
+   that would not go away. Pointer devices keep the effect. */
+@media (hover: hover) {
+  .project-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 18px 40px var(--shadow);
+  }
 }
 
 .project-link {
@@ -42,8 +47,10 @@
   transition: transform 0.6s ease;
 }
 
-.project-card:hover .project-image {
-  transform: scale(1.04);
+@media (hover: hover) {
+  .project-card:hover .project-image {
+    transform: scale(1.04);
+  }
 }
 
 /* Lighter than before — the compact bar no longer needs a heavy scrim
@@ -131,8 +138,10 @@
   transition: transform 0.25s ease;
 }
 
-.project-card:hover .project-cta svg {
-  transform: translateX(3px);
+@media (hover: hover) {
+  .project-card:hover .project-cta svg {
+    transform: translateX(3px);
+  }
 }
 
 @media (max-width: 640px) {

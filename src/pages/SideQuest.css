@@ -54,9 +54,13 @@
   color: inherit;
 }
 
-.quest-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 18px 40px var(--shadow);
+/* Same as the project cards: on touch the latched :hover left the card
+   lifted and the photo scaled up after a tap. */
+@media (hover: hover) {
+  .quest-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 18px 40px var(--shadow);
+  }
 }
 
 .quest-media,
@@ -79,8 +83,10 @@
   transition: transform 0.6s ease;
 }
 
-.quest-card:hover .quest-image {
-  transform: scale(1.04);
+@media (hover: hover) {
+  .quest-card:hover .quest-image {
+    transform: scale(1.04);
+  }
 }
 
 .quest-overlay {

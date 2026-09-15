@@ -82,19 +82,32 @@ html {
   scroll-behavior: smooth;
   /* Offset anchored sections so the sticky glass header never covers them. */
   scroll-padding-top: var(--header-h);
+  /* iOS and Android inflate the text of wide blocks on their own — most
+     visibly after a rotation — which reads as the page zooming itself. Hold
+     the designed size. Deliberate pinch zoom is untouched. */
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
 }
 
 body {
   margin: 0;
+  /* dvh, not vh: on phones 100vh is the tall viewport measured with the
+     address bar hidden, so a vh floor leaves a phantom scroll and reflows the
+     page every time that bar slides in or out. vh stays as the fallback. */
   min-height: 100vh;
+  min-height: 100dvh;
   background: var(--bg);
-  /* Guards against any single wide element forcing a sideways scroll. */
+  /* Guards against any single wide element forcing a sideways scroll. The
+     root element is deliberately left alone: body's value is what propagates
+     to the viewport, and clipping on <html> instead has broken the sticky
+     header in some Safari builds. */
   overflow-x: hidden;
 }
 
 #root {
   display: flex;
   min-height: 100vh;
+  min-height: 100dvh;
   flex-direction: column;
   background: var(--bg);
 }
@@ -141,6 +154,32 @@ button,
 input,
 textarea {
   font: inherit;
+}
+
+/* Two taps inside the double-tap window zoom the page in on iOS and Android,
+   and this site invites exactly that — stepping through a carousel tap by
+   tap, nudging a dot twice. Every control opts out of double-tap zoom;
+   deliberate pinch zoom still works everywhere. The tap highlight goes with
+   it: the site draws its own press states, and the default grey flood over a
+   whole project card reads as a rendering fault. */
+a,
+button,
+input,
+textarea,
+select,
+summary,
+[role="button"],
+[role="tab"] {
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Under 16px iOS zooms the page in when a field takes focus and never zooms
+   back out. These inherit 16px today; pinning it keeps that true. */
+input,
+textarea,
+select {
+  font-size: 16px;
 }
 
 :focus-visible {
@@ -230,9 +269,14 @@ textarea {
     transform 0.2s ease;
 }
 
-.button:hover {
-  opacity: 0.86;
-  transform: translateY(-1px);
+/* Hover lifts only where there is a real pointer. On touch the :hover state
+   latches after a tap and the control stays displaced until something else is
+   tapped — which looks like the layout shifting on its own. */
+@media (hover: hover) {
+  .button:hover {
+    opacity: 0.86;
+    transform: translateY(-1px);
+  }
 }
 
 .button--ghost {

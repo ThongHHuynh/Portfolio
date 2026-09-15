@@ -37,9 +37,11 @@
   transition: border-color 0.2s ease, transform 0.2s ease;
 }
 
-.contact-link:hover {
-  border-color: var(--ink);
-  transform: translateY(-2px);
+@media (hover: hover) {
+  .contact-link:hover {
+    border-color: var(--ink);
+    transform: translateY(-2px);
+  }
 }
 
 .contact-icon {

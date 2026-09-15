@@ -27,8 +27,10 @@
   transition: transform 0.25s ease;
 }
 
-.detail-back:hover svg {
-  transform: translateX(-4px);
+@media (hover: hover) {
+  .detail-back:hover svg {
+    transform: translateX(-4px);
+  }
 }
 
 .detail-subtitle {
@@ -154,8 +156,10 @@
   justify-items: end;
 }
 
-.detail-nav-link:hover {
-  transform: translateY(-2px);
+@media (hover: hover) {
+  .detail-nav-link:hover {
+    transform: translateY(-2px);
+  }
 }
 
 .detail-nav-label {
