@@ -315,11 +315,15 @@ function HeroPool({ children, className = "", id }: HeroPoolProps) {
     layout();
     draw();
 
-    // Touch and pen never see the field — the reticle is fine-pointer only —
-    // yet the pointer events a scroll drag emits would run the whole spring
-    // simulation for every frame of that scroll. Leave the canvas sized and
-    // empty and skip the simulation entirely.
-    if (prefersReducedMotion || !hasFinePointer) {
+    // Touch drives the field too. The worry was that a scroll drag over the
+    // hero would emit pointermove for every frame of that scroll and run the
+    // whole spring simulation alongside it — but the page now allows pan-y
+    // and nothing else, so a vertical drag is claimed by the browser as a
+    // scroll and cancels the pointer within a few frames, while sideways
+    // travel scrolls nothing and is left to play out here as the gesture the
+    // field is for. Only the reticle stays fine-pointer, further down: it is
+    // a stand-in for a cursor, and there is no cursor to stand in for.
+    if (prefersReducedMotion) {
       return () => {
         controller.abort();
         redrawRef.current = null;
